@@ -7,14 +7,11 @@
   <version>0.11.BETA</version>
   <name>Orcid Java Client - ${restlet.edition} Edition</name>
 
-      <properties>
-        <restlet.edition>gae</restlet.edition>
-         <!-- github server corresponds to entry in ~/.m2/settings.xml -->
-	    <github.global.server>github</github.global.server>
-    </properties>
+	<properties>
+		<restlet.edition>gae</restlet.edition>
+		<github.global.server>github</github.global.server>
+	</properties>
     
-
-
       <repositories>
         <repository>
            <id>maven-restlet</id>
@@ -32,9 +29,9 @@
 	</dependency>
         
 	<dependency>
-	  <groupId>com.fasterxml.jackson.core</groupId>
-	  <artifactId>jackson-databind</artifactId>
-	  <version>2.1.0</version>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.1.0</version>
 	</dependency>
     
     <dependency>
@@ -80,14 +77,17 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  
-  <distributionManagement>
-    <repository>
-        <id>internal.repo</id>
-        <name>Temporary Staging Repository</name>
-        <url>file://${project.build.directory}/mvn-repo</url>
-    </repository>
-</distributionManagement>
+
+    <!-- the below will push the project to Github as a maven repository
+    thanks to: http://stackoverflow.com/questions/14013644/hosting-a-maven-repository-on-github -->
+    
+	<distributionManagement>
+	    <repository>
+	        <id>internal.repo</id>
+	        <name>Temporary Staging Repository</name>
+	        <url>file://${project.build.directory}/mvn-repo</url>
+	    </repository>
+	</distributionManagement>
 
     <build>
     <plugins>
@@ -101,7 +101,7 @@
                 <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
                 <branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
                 <includes><include>**/*</include></includes>
-                <repositoryName>YOUR-REPOSITORY-NAME</repositoryName>      <!-- github repo name -->
+                <repositoryName>https://github.com/TomDemeranville/orcid-java-client.git</repositoryName>      <!-- github repo name -->
                 <repositoryOwner>tomdemeranville</repositoryOwner>    <!-- github username  -->
             </configuration>
             <executions>
