@@ -1,4 +1,4 @@
-package uk.bl.odin.orcid.client;
+package uk.bl.odin.orcid.client.constants;
 
 /** External Identifier Types.
  * Not included in ORCiD schema.

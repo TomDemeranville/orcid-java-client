@@ -1,4 +1,4 @@
-package uk.bl.odin.orcid.client;
+package uk.bl.odin.orcid.client.constants;
 
 import org.restlet.data.MediaType;
 

@@ -18,6 +18,8 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.restlet.util.Series;
 
+import uk.bl.odin.orcid.client.constants.OrcidAuthScope;
+import uk.bl.odin.orcid.client.constants.OrcidConstants;
 import uk.bl.odin.orcid.schema.messages.onepointone.OrcidActivities;
 import uk.bl.odin.orcid.schema.messages.onepointone.OrcidMessage;
 import uk.bl.odin.orcid.schema.messages.onepointone.OrcidProfile;

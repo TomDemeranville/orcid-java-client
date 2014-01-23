@@ -1,4 +1,4 @@
-package uk.bl.odin.orcid.client;
+package uk.bl.odin.orcid.client.constants;
 
 /** Models the various Auth scopes
  * 

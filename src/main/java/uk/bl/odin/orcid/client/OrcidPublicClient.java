@@ -7,6 +7,7 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
+import uk.bl.odin.orcid.client.constants.OrcidConstants;
 import uk.bl.odin.orcid.schema.messages.onepointone.OrcidMessage;
 import uk.bl.odin.orcid.schema.messages.onepointone.OrcidProfile;
 import uk.bl.odin.orcid.schema.messages.onepointone.OrcidSearchResults;
