@@ -1,6 +1,10 @@
-#ORCiD Java Client
+#ORCiD Java Client 
 
-Simple, easy to use ORCiD client written in Java.  Supports the pbulic and Tier2 API.
+(for ORCiD message Schema v1.1)
+
+Simple, easy to use ORCiD client written in Java.  Supports the public and Tier2 API.
+
+Natural object mapping - The entire ORCiD message schema is represented as a hirearchical graph of POJOs.
 
 #Public API Examples:
 
