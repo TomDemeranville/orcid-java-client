@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>uk.bl</groupId>
-  <artifactId>orcid-java-client-${restlet.edition}</artifactId>
+  <artifactId>orcid-java-client-gae</artifactId>
   <packaging>jar</packaging>
-  <version>0.11.BETA</version>
+  <version>0.11.0</version>
   <name>Orcid Java Client - ${restlet.edition} Edition</name>
 
 	<properties>
@@ -79,7 +79,8 @@
   </dependencies>
 
     <!-- the below will push the project to Github as a maven repository
-    thanks to: http://stackoverflow.com/questions/14013644/hosting-a-maven-repository-on-github -->
+    thanks to: http://stackoverflow.com/questions/14013644/hosting-a-maven-repository-on-github 
+    use 'mvn clean deploy' to push to maven repo -->
     
 	<distributionManagement>
 	    <repository>
