@@ -17,16 +17,17 @@ public class OrcidPublicClient {
 
 	private static final String PUBLIC_URI_V11 = "http://pub.orcid.org/v1.1";
 	private static final String SEARCH_ENDPOINT = "/search/orcid-bio/";
+	
 	private static final String TYPE_ORCID_BIO = "orcid-bio";
 	private static final String TYPE_ORCID_PROFILE = "orcid-profile";
 
-	/** Perform a serach against the public ORCID API
+	/** Perform a search against the public ORCID API
 	 * 
 	 * @param query the 'q' GET param to send
 	 * @param page the 'page' GET param to send - starts from 0
-	 * @param page the 'page' GET param to send - -1 will ommit this parameter and use ORCiD default pagesize
+	 * @param pagesize the 'page' GET param to send - -1 will ommit this parameter and use ORCiD default pagesize
 	 * @return an OrcidSearchResults object with 0 or more OrcidSearchResult children
-	 * @throws IOException if result unparsable.
+	 * @throws IOException if result unparsable or network unreachable.
 	 * @throws ResourceException if there's a http problem (e.g. 404, 400)
 	 */
 	public OrcidSearchResults search(String query, int page, int pagesize) throws IOException {
@@ -38,9 +39,8 @@ public class OrcidPublicClient {
 		if (page >= 0)
 			res.setQueryValue("rows", Integer.toString(pagesize));
 		if (pagesize >= 0)
-			res.setQueryValue("start", Integer.toString(page));// starts from 0
-		Representation r = res.get();
-		JaxbRepresentation<OrcidMessage> jax = new JaxbRepresentation<OrcidMessage>(r, OrcidMessage.class);
+			res.setQueryValue("start", Integer.toString(page));
+		JaxbRepresentation<OrcidMessage> jax = new JaxbRepresentation<OrcidMessage>(res.get(), OrcidMessage.class);
 		OrcidMessage m = jax.getObject();
 		return m.getOrcidSearchResults();
 	}
@@ -50,9 +50,8 @@ public class OrcidPublicClient {
 	}
 
 	private OrcidProfile getProfile(String orcid, String profileType) throws IOException, ResourceException {
-		if (profileType == null) {
-			profileType = TYPE_ORCID_PROFILE;
-		}
+		if (profileType == null) 
+			throw new IllegalArgumentException();
 		ClientResource res = new ClientResource(PUBLIC_URI_V11 + "/" + orcid + "/" + profileType);
 		res.accept(OrcidConstants.APPLICATION_ORCID_XML);
 		JaxbRepresentation<OrcidMessage> jax = new JaxbRepresentation<OrcidMessage>(res.get(), OrcidMessage.class);
@@ -64,7 +63,7 @@ public class OrcidPublicClient {
 	 * 
 	 * @param orcid  the ORCID in plain, non URL format
 	 * @return an OrcidProfile, with with OrcidWorks
-	 * @throws IOException if unparsable.
+	 * @throws IOException if result unparsable or network unreachable.
 	 * @throws ResourceException if there's a http problem (e.g. 404, 400)
 	 */
 	public OrcidProfile getOrcidProfile(String orcid) throws ResourceException, IOException{
@@ -75,7 +74,7 @@ public class OrcidPublicClient {
 	 * 
 	 * @param orcid the ORCID in plain, non URL format
 	 * @return an OrcidProfile, without OrcidWorks
-	 * @throws IOException if unparsable.
+	 * @throws IOException if result unparsable or network unreachable.
 	 * @throws ResourceException if there's a http problem (e.g. 404, 400)
 	 */
 	public OrcidProfile getOrcidBio(String orcid) throws ResourceException, IOException{

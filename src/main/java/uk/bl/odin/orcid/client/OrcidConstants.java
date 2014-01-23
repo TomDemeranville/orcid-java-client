@@ -24,5 +24,5 @@ public class OrcidConstants {
 
 	// work types: http://support.orcid.org/knowledgebase/articles/118795
 	//http://support.orcid.org/knowledgebase/articles/118807
-	//handle is not a top level type!!!
+	//note handles are not a top level type!!!
 }
