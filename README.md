@@ -22,13 +22,15 @@ See also: [Orcid Profile Updater](https://github.com/TomDemeranville/orcid-updat
 	//get an auth token
 	OrcidOAuthClient client = new OrcidOAuthClient("OrcidClientID","OrcidClientSecret",("OrcidReturnURI"),useSandbox);
 	OrcidAccessTokenResponse token = client.getAccessToken(authCode);
+
 	//create a work
 	OrcidWork work = new OrcidWork();
 	WorkTitle title = new WorkTitle();
 	title.setTitle("Test Title");
 	work.setWorkTitle(title);
+
 	//append it to the users profile
-	client.appendWork(token.getOrcid(), token.getToken, work);
+	client.appendWork(token.getOrcid(), token.getAccess_token(), work);
 
 #Maven
 Add the repository to your pom.xml like so:
