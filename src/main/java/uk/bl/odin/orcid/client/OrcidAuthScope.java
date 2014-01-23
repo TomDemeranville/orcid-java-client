@@ -9,7 +9,7 @@ package uk.bl.odin.orcid.client;
  */
 public enum OrcidAuthScope {
 
-	AUTHENTICATE("authenticate"),
+	AUTHENTICATE("/authenticate"),
 	CREATE_WORKS("/orcid-works/create"),
 	CREATE_EXTERNAL_ID("/orcid-bio/external-identifiers/create"),
 	CREATE_PROFILE("/orcid-profile/create"),
