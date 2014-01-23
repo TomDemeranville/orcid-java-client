@@ -20,10 +20,15 @@ public class OrcidPublicClient {
 	private static final String TYPE_ORCID_BIO = "orcid-bio";
 	private static final String TYPE_ORCID_PROFILE = "orcid-profile";
 
-	public OrcidSearchResults search(String query) throws IOException {
-		return search(query, -1, -1);
-	}
-
+	/** Perform a serach against the public ORCID API
+	 * 
+	 * @param query the 'q' GET param to send
+	 * @param page the 'page' GET param to send - starts from 0
+	 * @param page the 'page' GET param to send - -1 will ommit this parameter and use ORCiD default pagesize
+	 * @return an OrcidSearchResults object with 0 or more OrcidSearchResult children
+	 * @throws IOException if result unparsable.
+	 * @throws ResourceException if there's a http problem (e.g. 404, 400)
+	 */
 	public OrcidSearchResults search(String query, int page, int pagesize) throws IOException {
 		if (query == null || query.isEmpty())
 			throw new IllegalArgumentException();
@@ -36,13 +41,12 @@ public class OrcidPublicClient {
 			res.setQueryValue("start", Integer.toString(page));// starts from 0
 		Representation r = res.get();
 		JaxbRepresentation<OrcidMessage> jax = new JaxbRepresentation<OrcidMessage>(r, OrcidMessage.class);
-		try {
-			OrcidMessage m = jax.getObject();
-			return m.getOrcidSearchResults();
-		} catch (IOException e) {
-			// TODO: handle properly
-			throw e;
-		}
+		OrcidMessage m = jax.getObject();
+		return m.getOrcidSearchResults();
+	}
+	
+	public OrcidSearchResults search(String query) throws IOException {
+		return search(query, -1, -1);
 	}
 
 	private OrcidProfile getProfile(String orcid, String profileType) throws IOException, ResourceException {
