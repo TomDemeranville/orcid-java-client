@@ -1,6 +1,6 @@
 #ORCiD Java Client 
 
-Simple, easy to use ORCiD client written in Java.  Supports the public and Tier2 API with OAuth.  Natural object mapping - The entire ORCiD message schema is represented as a hirearchical graph of POJOs.  Maven support, GAE support.
+Simple, easy to use ORCiD client written in Java.  Supports the public and Tier2 API with OAuth.  Natural object mapping - The entire ORCiD message schema is represented as a hirearchical graph of POJOs with JAXB support for serialisation.  Maven support, GAE support.  Annotated to support javax.inject depdendency injection.
 
 Early stage development - note API may break.  Pull requests welcome.
 
