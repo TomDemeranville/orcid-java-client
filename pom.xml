@@ -100,9 +100,10 @@
                 <message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
                 <noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
                 <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
+                <merge>true</merge>
                 <branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
                 <includes><include>**/*</include></includes>
-                <repositoryName>https://github.com/TomDemeranville/orcid-java-client.git</repositoryName>      <!-- github repo name -->
+                <repositoryName>orcid-java-client</repositoryName>      <!-- github repo name -->
                 <repositoryOwner>tomdemeranville</repositoryOwner>    <!-- github username  -->
             </configuration>
             <executions>
