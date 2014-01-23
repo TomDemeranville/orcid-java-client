@@ -1,14 +1,12 @@
 #ORCiD Java Client 
 
-Simple, easy to use ORCiD client written in Java.  Supports the public and Tier2 API.  Maven support, GAE support.
-
-Natural object mapping - The entire ORCiD message schema is represented as a hirearchical graph of POJOs.
+Simple, easy to use ORCiD client written in Java.  Supports the public and Tier2 API with OAuth.  Natural object mapping - The entire ORCiD message schema is represented as a hirearchical graph of POJOs.  Maven support, GAE support.
 
 Early stage development - note API may break.  Pull requests welcome.
 
 See also: [Orcid Profile Updater](https://github.com/TomDemeranville/orcid-update-java)
 
-#Public API Examples:
+##Public API Examples:
 
 	OrcidPublicClient client = new OrcidPublicClient();
 
@@ -18,6 +16,19 @@ See also: [Orcid Profile Updater](https://github.com/TomDemeranville/orcid-updat
 	//Search for profile with a DOI attached
 	String query = OrcidPublicClient.buildDOIQuery("10.6084/m9.figshare.909352");
 	OrcidSearchResults results = client.search(query);
+
+##Private API examples
+	
+	//get an auth token
+	OrcidOAuthClient client = new OrcidOAuthClient("OrcidClientID","OrcidClientSecret",("OrcidReturnURI"),useSandbox);
+	OrcidAccessTokenResponse token = client.getAccessToken(authCode);
+	//create a work
+	OrcidWork work = new OrcidWork();
+	WorkTitle title = new WorkTitle();
+	title.setTitle("Test Title");
+	work.setWorkTitle(title);
+	//append it to the users profile
+	client.appendWork(token.getOrcid(), token.getToken, work);
 
 #Maven
 Add the repository to your pom.xml like so:
@@ -49,13 +60,13 @@ Or like this for Google App Engine:
 		<version>0.11.0</version>
 	</dependency>
 
-You can see the list of versions here: (https://github.com/TomDemeranville/orcid-java-client/tree/mvn-repo/uk/bl/orcid-java-client-gae)
+You can see the list of versions in the repository here: (https://github.com/TomDemeranville/orcid-java-client/tree/mvn-repo/uk/bl)
 
 #Schema support
 
 The version supports the ORCiD message schema 1.1
 
-##Contact
+#Contact
 
 [@tomdemeranville on twitter](https://twitter.com/tomdemeranville)
 
