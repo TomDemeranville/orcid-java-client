@@ -18,8 +18,6 @@ public class OrcidConstants {
 	public static final String SEARCH_PARAM_DOI = "digital-object-ids";
 	public static String MESSAGE_VERSION = "1.1";
 	
-	//TODO: enumerate roles
-	public static String ROLE_AUTHOR = "author";
 	//TODO: emumerate sequences
 	public static String SEQUENCE_FIRST = "first";
 }

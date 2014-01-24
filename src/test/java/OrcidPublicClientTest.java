@@ -32,9 +32,8 @@ public class OrcidPublicClientTest {
 		OrcidProfile pro = client.getOrcidProfile("0000-0002-9151-6445");
 		assertEquals("Unit",pro.getOrcidBio().getPersonalDetails().getGivenNames());
 		assertEquals("Test",pro.getOrcidBio().getPersonalDetails().getFamilyName());
-		assertNotNull(pro.getOrcidActivities().getOrcidWorks().getOrcidWork());
-		assertEquals(pro.getOrcidIdentifier().getPath(),"0000-0002-9151-6445");
-		
+		assertEquals(pro.getOrcidActivities().getOrcidWorks().getOrcidWork().size(),2);
+		assertEquals(pro.getOrcidIdentifier().getPath(),"0000-0002-9151-6445");		
 		
 	}
 	
@@ -49,4 +48,15 @@ public class OrcidPublicClientTest {
 		assertEquals(1,results.getNumFound().intValue());
 		assertEquals(results.getOrcidSearchResult().get(0).getOrcidProfile().getOrcidIdentifier().getPath(),"0000-0002-9151-6445");
 	}
+	
+	@Test
+	public final void testSearchForDOIPrefix() throws IOException{	
+		OrcidPublicClient client = new OrcidPublicClient();
+		String query = OrcidPublicClient.buildDOIPrefixQuery("10.9998");
+		assertEquals("digital-object-ids: 10.9998*",query);
+		OrcidSearchResults results = client.search(query);
+		assertEquals(1,results.getNumFound().intValue());
+		assertEquals(results.getOrcidSearchResult().get(0).getOrcidProfile().getOrcidIdentifier().getPath(),"0000-0002-9151-6445");
+	}
+	
 }

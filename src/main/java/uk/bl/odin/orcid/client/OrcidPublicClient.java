@@ -82,9 +82,8 @@ public class OrcidPublicClient {
 		return getProfile(orcid,TYPE_ORCID_BIO);
 	}
 
-	/**
-	 * Constructs a param suitable for use as a query that matches profiles with
-	 * this DOI
+	/** Constructs a param suitable for use as a query that matches profiles with
+	 * this EXACT DOI string
 	 * 
 	 * @param doi
 	 *            the doi to match.
@@ -92,6 +91,17 @@ public class OrcidPublicClient {
 	 */
 	public static final String buildDOIQuery(String doi) {
 		return OrcidConstants.SEARCH_PARAM_DOI + ": \"" + doi + "\"";
+	}
+	
+	/** Constructs a param suitable for use as a query that matches profiles with
+	 * dois belonging to this prefix
+	 * 
+	 * @param doiprefix
+	 *            the doi prefix to match, example: "10.1087"
+	 * @return the query string
+	 */
+	public static final String buildDOIPrefixQuery(String doiprefix) {
+		return OrcidConstants.SEARCH_PARAM_DOI + ": " + doiprefix + "*";
 	}
 
 }
