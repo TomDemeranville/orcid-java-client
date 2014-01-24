@@ -8,6 +8,7 @@ See also: [Orcid Profile Updater](https://github.com/TomDemeranville/orcid-updat
 
 ##Public API Examples:
 
+	//create a client
 	OrcidPublicClient client = new OrcidPublicClient();
 
 	//Fetch a profile
@@ -60,7 +61,7 @@ Or like this for Google App Engine:
 	<dependency>
 		<groupId>uk.bl</groupId>
 		<artifactId>orcid-java-client-gae</artifactId>
-		<version>0.11.0</version>
+		<version>0.11.2-rc1</version>
 	</dependency>
 
 You can see the list of versions in the repository here: (https://github.com/TomDemeranville/orcid-java-client/tree/mvn-repo/uk/bl)
