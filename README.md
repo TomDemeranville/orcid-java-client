@@ -14,8 +14,9 @@ See also: [Orcid Profile Updater](https://github.com/TomDemeranville/orcid-updat
 	OrcidProfile pro = client.getOrcidProfile("0000-0002-9151-6445");
 
 	//Search for profile with a DOI attached
-	String query = OrcidPublicClient.buildDOIQuery("10.6084/m9.figshare.909352");
-	OrcidSearchResults results = client.search(query);
+	OrcidSearchResults results = client.search(OrcidSearchField.WORK_ID_DOI.buildExactQuery("10.9997/abc123"));
+	//Search for all profiles with a given DOI prefix attached
+	OrcidSearchResults results = client.search(OrcidSearchField.WORK_ID_DOI.buildPrefixQuery("10.9997/"));
 
 ##Private API examples
 	
@@ -30,7 +31,7 @@ See also: [Orcid Profile Updater](https://github.com/TomDemeranville/orcid-updat
 	work.setWorkTitle(title);
 
 	//append it to the users profile
-	client.appendWork(token.getOrcid(), token.getAccess_token(), work);
+	client.appendWork(token, work);
 
 #Maven
 Add the repository to your pom.xml like so:
