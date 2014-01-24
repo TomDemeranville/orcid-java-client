@@ -8,6 +8,7 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import uk.bl.odin.orcid.client.constants.OrcidConstants;
+import uk.bl.odin.orcid.client.constants.OrcidSearchField;
 import uk.bl.odin.orcid.schema.messages.onepointone.OrcidMessage;
 import uk.bl.odin.orcid.schema.messages.onepointone.OrcidProfile;
 import uk.bl.odin.orcid.schema.messages.onepointone.OrcidSearchResults;
@@ -80,28 +81,6 @@ public class OrcidPublicClient {
 	 */
 	public OrcidProfile getOrcidBio(String orcid) throws ResourceException, IOException{
 		return getProfile(orcid,TYPE_ORCID_BIO);
-	}
-
-	/** Constructs a param suitable for use as a query that matches profiles with
-	 * this EXACT DOI string
-	 * 
-	 * @param doi
-	 *            the doi to match.
-	 * @return the query string
-	 */
-	public static final String buildDOIQuery(String doi) {
-		return OrcidConstants.SEARCH_PARAM_DOI + ": \"" + doi + "\"";
-	}
-	
-	/** Constructs a param suitable for use as a query that matches profiles with
-	 * dois belonging to this prefix
-	 * 
-	 * @param doiprefix
-	 *            the doi prefix to match, example: "10.1087"
-	 * @return the query string
-	 */
-	public static final String buildDOIPrefixQuery(String doiprefix) {
-		return OrcidConstants.SEARCH_PARAM_DOI + ": " + doiprefix + "*";
 	}
 
 }

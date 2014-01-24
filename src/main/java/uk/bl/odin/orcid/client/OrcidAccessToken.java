@@ -10,7 +10,7 @@ package uk.bl.odin.orcid.client;
  * @author tom
  * 
  */
-public class OrcidAccessTokenResponse {
+public class OrcidAccessToken {
 
 	private String access_token;
 	private String token_type;

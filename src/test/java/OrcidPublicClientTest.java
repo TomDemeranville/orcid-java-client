@@ -11,6 +11,7 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.Resource;
 
 import uk.bl.odin.orcid.client.OrcidPublicClient;
+import uk.bl.odin.orcid.client.constants.OrcidSearchField;
 import uk.bl.odin.orcid.schema.messages.onepointone.OrcidProfile;
 import uk.bl.odin.orcid.schema.messages.onepointone.OrcidSearchResults;
 
@@ -42,7 +43,7 @@ public class OrcidPublicClientTest {
 		//THIS IS RETURNING INVALID MESSAGES - they're 1.0.23 (have an <orcid> element) despite being labeled as 1.1
 		//I've hacked a fix into the JAXB classes.
 		OrcidPublicClient client = new OrcidPublicClient();
-		String query = OrcidPublicClient.buildDOIQuery("10.9997/abc123");
+		String query = OrcidSearchField.WORK_ID_DOI.buildExactQuery("10.9997/abc123");
 		assertEquals("digital-object-ids: \"10.9997/abc123\"",query);
 		OrcidSearchResults results = client.search(query);
 		assertEquals(1,results.getNumFound().intValue());
@@ -52,7 +53,7 @@ public class OrcidPublicClientTest {
 	@Test
 	public final void testSearchForDOIPrefix() throws IOException{	
 		OrcidPublicClient client = new OrcidPublicClient();
-		String query = OrcidPublicClient.buildDOIPrefixQuery("10.9998");
+		String query = OrcidSearchField.WORK_ID_DOI.buildPrefixQuery("10.9998");
 		assertEquals("digital-object-ids: 10.9998*",query);
 		OrcidSearchResults results = client.search(query);
 		assertEquals(1,results.getNumFound().intValue());

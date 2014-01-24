@@ -19,6 +19,8 @@ public enum OrcidAuthScope {
 	READ_BIO("/orcid-bio/read-limited"),
 	READ_WORKS("/orcid-works/read-limited"),
 	READPUBLIC("/read-public");
+	//affiliation schema is 1.2! //see http://support.orcid.org/knowledgebase/articles/269377-tutorial-add-affiliations-with-curl
+	//CREATE_AFFILIATION("/affiliations/create");
 	
 	private final String stringValue;
 	private OrcidAuthScope(final String s) { stringValue = s; }

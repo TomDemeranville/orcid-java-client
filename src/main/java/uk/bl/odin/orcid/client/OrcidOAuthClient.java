@@ -1,6 +1,7 @@
 package uk.bl.odin.orcid.client;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -20,16 +21,20 @@ import org.restlet.util.Series;
 
 import uk.bl.odin.orcid.client.constants.OrcidAuthScope;
 import uk.bl.odin.orcid.client.constants.OrcidConstants;
+import uk.bl.odin.orcid.client.constants.OrcidExternalIdentifierType;
 import uk.bl.odin.orcid.schema.messages.onepointone.OrcidActivities;
+import uk.bl.odin.orcid.schema.messages.onepointone.OrcidBio;
 import uk.bl.odin.orcid.schema.messages.onepointone.OrcidMessage;
 import uk.bl.odin.orcid.schema.messages.onepointone.OrcidProfile;
 import uk.bl.odin.orcid.schema.messages.onepointone.OrcidWork;
 import uk.bl.odin.orcid.schema.messages.onepointone.OrcidWorks;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Joiner;
 
 /**
  * General purpose ORCID client that supports simple OAuth scenarios
+ * @see http://support.orcid.org/knowledgebase/articles/116874-orcid-api-guide
  * Uses message 1.1  https://raw.github.com/ORCID/ORCID-Source/master/orcid-model/src/main/resources/orcid-message-1.1.xsd 
  */
 public class OrcidOAuthClient {
@@ -89,16 +94,25 @@ public class OrcidOAuthClient {
 	/** Create a URL that can be used to request an accessCode
 	 */
 	public String getAuthzCodeRequest(String state, OrcidAuthScope scope) {
+		return getAuthzCodeRequest(state)+"&scope=" + scope.toString();
+	}
+	
+	/** Create a URL that can be used to request an accessCode
+	 */
+	public String getAuthzCodeRequest(String state, List<OrcidAuthScope> scopes) {
+		return getAuthzCodeRequest(state)+"&scope=" + Joiner.on(" ").join(scopes);
+	}
+
+	private String getAuthzCodeRequest(String state){
 		String req = loginUri + AUTHZ_ENDPOINT;
 		req += "?client_id=" + clientID;
-		req += "&scope=" + scope.toString();
 		req += "&response_type=code";
 		if (state != null)
 			req += "&state=" + state;
 		req += "&redirect_uri=" + redirectUri;
 		return req;
 	}
-
+	
 	/**
 	 * Exchange and authorization code for an auth token from ORCID
 	 * 
@@ -111,7 +125,7 @@ public class OrcidOAuthClient {
 	 * @throws IOException if result unparsable or network unreachable.
 	 * @throws ResourceException if there's a http problem (e.g. 404, 400)
 	 */
-	public OrcidAccessTokenResponse getAccessToken(String authorizationCode) throws ResourceException, IOException {
+	public OrcidAccessToken getAccessToken(String authorizationCode) throws ResourceException, IOException {
 		Reference ref = new Reference(apiUriToken + TOKEN_ENDPOINT);
 		ClientResource client = new ClientResource(ref);
 		Form f = new Form();
@@ -123,28 +137,25 @@ public class OrcidOAuthClient {
 		client.getContext().getParameters().add("followRedirects", "true");
 		Representation rep = client.post(f, MediaType.APPLICATION_JSON);
 		String json = rep.getText();
-		OrcidAccessTokenResponse token = new ObjectMapper().reader(OrcidAccessTokenResponse.class).readValue(json);
+		OrcidAccessToken token = new ObjectMapper().reader(OrcidAccessToken.class).readValue(json);
 		return token;
 	}
 
 	/**
-	 * Add a work to a users profile.
-	 * 
+	 * Adds a research activity to the ORCID Record.
+ 	 * requires OrcidAuthScope.CREATE_WORKS scope
 	 * @see http 
 	 *      ://support.orcid.org/knowledgebase/articles/177528-add-works-technical
 	 *      -developer
 	 * @see http
 	 *      ://support.orcid.org/knowledgebase/articles/171893-tutorial-add-
 	 *      works -with-curl
-	 * @param token
-	 *            a valid auth token
-	 * @param work
-	 *            a valid orcid work
+	 * @param token containing a valid auth token and orcid
 	 * @throws IOException if result unparsable or network unreachable.
 	 * @throws ResourceException if there's a http problem (e.g. 404, 400)
 	 */
-	public void appendWork(String orcid, String token, OrcidWork work) throws ResourceException,IOException {
-		Reference ref = new Reference(apiUriV11 + "/" + orcid + WORK_CREATE_ENDPOINT);
+	public void appendWork(OrcidAccessToken token, OrcidWork work) throws ResourceException,IOException {
+		Reference ref = new Reference(apiUriV11 + "/" + token.getOrcid() + WORK_CREATE_ENDPOINT);
 		ClientResource client = new ClientResource(ref);
 		// OAUTH bearer is a pain via restlet ChallengeScheme on GAE
 		addRestletHeader(client, "Authorization", "Bearer " + token);
@@ -154,11 +165,50 @@ public class OrcidOAuthClient {
 		jax.setMediaType(OrcidConstants.APPLICATION_ORCID_XML);
 		client.post(jax);
 	}
+	
+	/** Completely replaces all fields of the bio marked as PUBLIC or LIMITED in the ORCID Record, EXCEPT FOR elements containing lists such as External identifiers and Affiliations.
+	 * requires OrcidAuthScope.UPDATE_BIO scope.
+	 * @param token containing a valid auth token and orcid
+	 * @param bio
+	 */
+	public void replaceOrcidBio(OrcidAccessToken token, OrcidBio bio){
+		throw new UnsupportedOperationException();
+	}
+	
+	/** Completely replaces all "works" research activities marked as PUBLIC or LIMITED in the ORCID Record.
+	 * requires OrcidAuthScope.UPDATE_WORKS scope
+	 * @param token containing a valid auth token and orcid
+	 * @param works
+	 */
+	public void replaceOrcidWorks(OrcidAccessToken token, List<OrcidWork> works){
+		throw new UnsupportedOperationException();
+	}
+	
+	/** Adds an external identifier to the ORCID Record.
+	 * requires OrcidAuthScope.CREATE_EXTERNAL_ID scope
+	 * 
+	 * @param token containing a valid auth token and orcid
+	 * @param type
+	 * @param value
+	 */
+	public void appendExternalIdentifier(OrcidAccessToken token, OrcidExternalIdentifierType type, String value){
+		throw new UnsupportedOperationException();
+	}
+	
+
+	/** Creates new ORCID iDs and Records and notifies each scholar that the record has been created. The scholar has 10 days to decline the invitation before the iD is activated and information in the Record become accessible (according to the privacy model). The scholar may claim (start managing) or deactivate the ORCID Record at any time after it has been created.
+	 * Handles the request for an OrcidAuthScope.CREATE_PROFILE scope internally.
+	 * @param profile
+	 */
+	public void createOrcidProfile(OrcidProfile profile){
+		throw new UnsupportedOperationException();
+	}
+	
 
 	/**
 	 * Wrap an OrcidWork inside an otherwise empty OrcidMessage
 	 */
-	public static final OrcidMessage wrapWork(OrcidWork work) {
+	private static final OrcidMessage wrapWork(OrcidWork work) {
 		OrcidWorks works = new OrcidWorks();
 		works.getOrcidWork().add(work);
 		OrcidActivities activities = new OrcidActivities();
