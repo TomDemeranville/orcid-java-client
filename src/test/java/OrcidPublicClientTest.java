@@ -20,12 +20,6 @@ public class OrcidPublicClientTest {
 	@Test
 	public final void testFetchProfile() throws IOException {
 		OrcidPublicClient client = new OrcidPublicClient();
-	
-		OrcidProfile pro = client.getOrcidProfile("0000-0002-9151-6445");
-		assertEquals("Unit",pro.getOrcidBio().getPersonalDetails().getGivenNames());
-		assertEquals("Test",pro.getOrcidBio().getPersonalDetails().getFamilyName());
-		assertNotNull(pro.getOrcidActivities().getOrcidWorks().getOrcidWork());
-		assertEquals(pro.getOrcidIdentifier().getPath(),"0000-0002-9151-6445");
 		
 		//No works.
 		OrcidProfile bio = client.getOrcidBio("0000-0002-9151-6445");
@@ -33,6 +27,15 @@ public class OrcidPublicClientTest {
 		assertEquals("Test",bio.getOrcidBio().getPersonalDetails().getFamilyName());
 		assertNull(bio.getOrcidActivities().getOrcidWorks());
 		assertEquals(bio.getOrcidIdentifier().getPath(),"0000-0002-9151-6445");
+	
+		//with works
+		OrcidProfile pro = client.getOrcidProfile("0000-0002-9151-6445");
+		assertEquals("Unit",pro.getOrcidBio().getPersonalDetails().getGivenNames());
+		assertEquals("Test",pro.getOrcidBio().getPersonalDetails().getFamilyName());
+		assertNotNull(pro.getOrcidActivities().getOrcidWorks().getOrcidWork());
+		assertEquals(pro.getOrcidIdentifier().getPath(),"0000-0002-9151-6445");
+		
+		
 	}
 	
 	@Test

@@ -6,7 +6,7 @@ package uk.bl.odin.orcid.client.constants;
  * @author tom
  *
  */
-public enum OrcidExternalIdentifier {
+public enum OrcidExternalIdentifierType {
 	OTHER_ID("other-id"),
 	ARXIV("arxiv"),
 	ASIN("asin"),
@@ -30,6 +30,6 @@ public enum OrcidExternalIdentifier {
 	ZBL("zbl");
 	
 	private final String stringValue;
-	private OrcidExternalIdentifier(final String s) { stringValue = s; }
+	private OrcidExternalIdentifierType(final String s) { stringValue = s; }
 	public String toString() { return stringValue; }
 }
