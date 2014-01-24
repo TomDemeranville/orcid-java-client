@@ -42,8 +42,8 @@ public class OrcidPublicClientTest {
 		//THIS IS RETURNING INVALID MESSAGES - they're 1.0.23 (have an <orcid> element) despite being labeled as 1.1
 		//I've hacked a fix into the JAXB classes.
 		OrcidPublicClient client = new OrcidPublicClient();
-		String query = OrcidPublicClient.buildDOIQuery("10.6084/m9.figshare.909352");
-		assertEquals("digital-object-ids: \"10.6084/m9.figshare.909352\"",query);
+		String query = OrcidPublicClient.buildDOIQuery("10.9997/abc123");
+		assertEquals("digital-object-ids: \"10.9997/abc123\"",query);
 		OrcidSearchResults results = client.search(query);
 		assertEquals(1,results.getNumFound().intValue());
 		assertEquals(results.getOrcidSearchResult().get(0).getOrcidProfile().getOrcidIdentifier().getPath(),"0000-0002-9151-6445");
