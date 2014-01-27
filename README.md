@@ -60,30 +60,16 @@ The latest versions can be found in the repository, here: (https://github.com/To
 
 Then add in the RESTlet dependencies.  These need to be defiend by your own application as RESTlet comes in multiple versions and your application must decide which to use.  Normal containers like jetty or tomcat use the "jee" edition and that is the most common scenario. Google app engine uses the "gae" edition. There are other editions are available for jse, android.  Mine is set up like so:
 
-	<properties>
-		<!-- for google app engine -->
-		<restlet.edition>gae</restlet.edition>
-		<!-- for jetty/tomcat -->
-		<restlet.edition>jee</restlet.edition>
-		<restlet.version>2.2-M6</restlet.version>
-	</properties> 
-
 	<dependency>
 		<groupId>org.restlet.${restlet.edition}</groupId>
 		<artifactId>org.restlet</artifactId>
-		<version>${restlet.version}</version>
+		<version>2.2-M6</version>
 	</dependency>
-
-	<dependency>
-		<groupId>org.restlet.${restlet.edition}</groupId>
-		<artifactId>org.restlet.ext.jaxb</artifactId>
-		<version>${restlet.version}</version>
-	</dependency> 
 
 	<dependency>
 	   <groupId>org.restlet.${restlet.edition}</groupId>
 	   <artifactId>org.restlet.ext.net</artifactId>
-		<version>${restlet.version}</version>
+		<version>2.2-M6</version>
 	</dependency>
 
 #Schema support

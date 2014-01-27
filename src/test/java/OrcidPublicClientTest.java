@@ -2,6 +2,8 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 
+import javax.xml.bind.JAXBException;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -19,7 +21,7 @@ import uk.bl.odin.orcid.schema.messages.onepointone.OrcidSearchResults;
 public class OrcidPublicClientTest {
 
 	@Test
-	public final void testFetchProfile() throws IOException {
+	public final void testFetchProfile() throws IOException, JAXBException {
 		OrcidPublicClient client = new OrcidPublicClient();
 		
 		//No works.
@@ -39,7 +41,7 @@ public class OrcidPublicClientTest {
 	}
 	
 	@Test
-	public final void testSearchForDOI() throws IOException{	
+	public final void testSearchForDOI() throws IOException, JAXBException{	
 		//THIS IS RETURNING INVALID MESSAGES - they're 1.0.23 (have an <orcid> element) despite being labeled as 1.1
 		//I've hacked a fix into the JAXB classes.
 		OrcidPublicClient client = new OrcidPublicClient();
@@ -51,7 +53,7 @@ public class OrcidPublicClientTest {
 	}
 	
 	@Test
-	public final void testSearchForDOIPrefix() throws IOException{	
+	public final void testSearchForDOIPrefix() throws IOException, JAXBException{	
 		OrcidPublicClient client = new OrcidPublicClient();
 		String query = OrcidSearchField.WORK_ID_DOI.buildPrefixQuery("10.9998");
 		assertEquals("digital-object-ids: 10.9998*",query);
@@ -59,5 +61,14 @@ public class OrcidPublicClientTest {
 		assertEquals(1,results.getNumFound().intValue());
 		assertEquals(results.getOrcidSearchResult().get(0).getOrcidProfile().getOrcidIdentifier().getPath(),"0000-0002-9151-6445");
 	}
+	
+	//add test for ZERO results!
+	/*
+	<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+	<orcid-message xmlns="http://www.orcid.org/ns/orcid">
+	    <message-version>1.1</message-version>
+	</orcid-message>
+	*/
+
 	
 }

@@ -62,4 +62,15 @@ public enum OrcidSearchField {
 	public final String buildPrefixQuery(String term) {
 		return this.toString() + ": " + term + "*";
 	}
+	
+	public static OrcidSearchField fromString(String text) {
+	    if (text != null) {
+	      for (OrcidSearchField b : OrcidSearchField.values()) {
+	        if (text.equals(b.toString())) {
+	          return b;
+	        }
+	      }
+	    }
+	    throw new IllegalArgumentException("invalid search field");
+	  }
 }

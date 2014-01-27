@@ -32,4 +32,22 @@ public enum OrcidExternalIdentifierType {
 	private final String stringValue;
 	private OrcidExternalIdentifierType(final String s) { stringValue = s; }
 	public String toString() { return stringValue; }
+	
+	public static OrcidExternalIdentifierType fromString(String text) {
+	    if (text != null) {
+	      for (OrcidExternalIdentifierType b : OrcidExternalIdentifierType.values()) {
+	        if (text.equals(b.toString())) {
+	          return b;
+	        }
+	      }
+	    }
+	    throw new IllegalArgumentException("invlaid idtype");
+	  }
+	
+	public OrcidSearchField toOrcidSearchField(){
+		if (this.equals(DOI)){
+			return OrcidSearchField.WORK_ID_DOI;
+		}
+		return OrcidSearchField.valueOf(this.toString());
+	}
 }
