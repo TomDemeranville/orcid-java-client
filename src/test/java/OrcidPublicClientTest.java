@@ -62,13 +62,13 @@ public class OrcidPublicClientTest {
 		assertEquals(results.getOrcidSearchResult().get(0).getOrcidProfile().getOrcidIdentifier().getPath(),"0000-0002-9151-6445");
 	}
 	
-	//add test for ZERO results!
-	/*
-	<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-	<orcid-message xmlns="http://www.orcid.org/ns/orcid">
-	    <message-version>1.1</message-version>
-	</orcid-message>
-	*/
-
+	@Test
+	public final void testEmptySearch() throws IOException, JAXBException{	
+		OrcidPublicClient client = new OrcidPublicClient();
+		String query = OrcidSearchField.WORK_ID_DOI.buildPrefixQuery("10.9998DGSJHAJHLDSAG");
+		assertEquals("digital-object-ids: 10.9998DGSJHAJHLDSAG*",query);
+		OrcidSearchResults results = client.search(query);
+		assertEquals(0,results.getNumFound().intValue());
+	}
 	
 }
