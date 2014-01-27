@@ -184,6 +184,7 @@ public class OrcidOAuthClient {
 			StringRepresentation rep = new StringRepresentation(sw.getBuffer(), OrcidConstants.APPLICATION_ORCID_XML);
 			client.post(rep);
 		} catch (JAXBException e) {
+			log.info("problem marshalling response "+e.getMessage());
 			throw new IOException(e);
 		}
 	}

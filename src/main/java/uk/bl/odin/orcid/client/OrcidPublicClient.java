@@ -68,17 +68,22 @@ public class OrcidPublicClient {
 			res.setQueryValue("rows", Integer.toString(pagesize));
 		if (pagesize >= 0)
 			res.setQueryValue("start", Integer.toString(page));
+
+		StringReader reader = new StringReader(res.get().getText());
+
 		try {
 			Unmarshaller um = orcidMessageContext.createUnmarshaller();
-			OrcidMessage message = (OrcidMessage) um.unmarshal(new StringReader(res.get().getText()));
-			return message.getOrcidSearchResults();
+			OrcidMessage message = (OrcidMessage) um.unmarshal(reader);
+			if (message.getOrcidSearchResults() == null) {
+				// shouldn't happen bug there's a bug ORCiD side.
+				OrcidSearchResults r = new OrcidSearchResults();
+				r.setNumFound(BigInteger.ZERO);
+				return r;
+			} else
+				return message.getOrcidSearchResults();
 		} catch (JAXBException e) {
-			//THIS IS happening when there's 0 results due to bug ORCiD side.
-			//for now we'll return some empty results.
-			OrcidSearchResults r = new OrcidSearchResults();
-			r.setNumFound(BigInteger.ZERO);
-			return r;
-			//throw new IOException(e);
+			log.info("Problem unmarshalling return value " + e);
+			throw new IOException(e);
 		}
 	}
 
@@ -96,6 +101,7 @@ public class OrcidPublicClient {
 			OrcidMessage message = (OrcidMessage) um.unmarshal(res.get().getStream());
 			return message.getOrcidProfile();
 		} catch (JAXBException e) {
+			log.info("Problem unmarshalling return value " + e);
 			throw new IOException(e);
 		}
 	}
