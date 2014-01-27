@@ -46,8 +46,10 @@ public enum OrcidExternalIdentifierType {
 	
 	public OrcidSearchField toOrcidSearchField(){
 		if (this.equals(DOI)){
-			return OrcidSearchField.WORK_ID_DOI;
+			return OrcidSearchField.DIGITAL_OBJECT_IDS;
+		} else if (this.equals(OTHER_ID)){
+			return OrcidSearchField.OTHER_IDENTIFIER_TYPE;
 		}
-		return OrcidSearchField.valueOf(this.toString());
+		return OrcidSearchField.fromString(this.toString());
 	}
 }

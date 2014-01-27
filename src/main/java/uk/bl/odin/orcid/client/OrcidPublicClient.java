@@ -56,7 +56,7 @@ public class OrcidPublicClient {
 	 * @throws IOException
 	 *             if result unparsable or network unreachable.
 	 * @throws ResourceException
-	 *             if there's a http problem (e.g. 404, 400)
+	 *             if there's a http problem (e.g. 404, 400, 500)
 	 */
 	public OrcidSearchResults search(String query, int page, int pagesize) throws IOException {
 		if (query == null || query.isEmpty())
@@ -64,18 +64,20 @@ public class OrcidPublicClient {
 		ClientResource res = new ClientResource(PUBLIC_URI_V11 + SEARCH_ENDPOINT);
 		res.accept(OrcidConstants.APPLICATION_ORCID_XML);
 		res.addQueryParameter("q", query);
-		if (page >= 0)
-			res.setQueryValue("rows", Integer.toString(pagesize));
 		if (pagesize >= 0)
-			res.setQueryValue("start", Integer.toString(page));
+			res.addQueryParameter("rows", Integer.toString(pagesize));
+		if (page >= 0)
+			res.addQueryParameter("start", Integer.toString(page));
 
+		//this will throw any non-2XX http code as a ResourceException
+		//note GAE thows internal errors in the 1XXX range!
 		StringReader reader = new StringReader(res.get().getText());
-
+		
 		try {
 			Unmarshaller um = orcidMessageContext.createUnmarshaller();
 			OrcidMessage message = (OrcidMessage) um.unmarshal(reader);
 			if (message.getOrcidSearchResults() == null) {
-				// shouldn't happen bug there's a bug ORCiD side.
+				// shouldn't happen but there's a bug ORCiD side.
 				OrcidSearchResults r = new OrcidSearchResults();
 				r.setNumFound(BigInteger.ZERO);
 				return r;
