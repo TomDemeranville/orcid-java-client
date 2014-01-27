@@ -2,6 +2,7 @@ package uk.bl.odin.orcid.client;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.math.BigInteger;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -72,7 +73,12 @@ public class OrcidPublicClient {
 			OrcidMessage message = (OrcidMessage) um.unmarshal(new StringReader(res.get().getText()));
 			return message.getOrcidSearchResults();
 		} catch (JAXBException e) {
-			throw new IOException(e);
+			//THIS IS happening when there's 0 results due to bug ORCiD side.
+			//for now we'll return some empty results.
+			OrcidSearchResults r = new OrcidSearchResults();
+			r.setNumFound(BigInteger.ZERO);
+			return r;
+			//throw new IOException(e);
 		}
 	}
 
