@@ -52,9 +52,11 @@ Add the dependency like this:
 
 	<dependency>
 		<groupId>uk.bl</groupId>
-		<artifactId>orcid-java-client-jee</artifactId>
-		<version>0.11.0</version>
+		<artifactId>orcid-java-client/artifactId>
+		<version>0.11.2</version>
 	</dependency>
+
+The latest versions can be found in the repository, here: (https://github.com/TomDemeranville/orcid-java-client/tree/mvn-repo/uk/bl/orcid-java-client)
 
 Then add in the RESTlet dependencies.  These need to be defiend by your own application as RESTlet comes in multiple versions and your application must decide which to use.  Normal containers like jetty or tomcat use the "jee" edition and that is the most common scenario. Google app engine uses the "gae" edition. There are other editions are available for jse, android.  Mine is set up like so:
 
