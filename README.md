@@ -15,9 +15,13 @@ See also: [Orcid Profile Updater](https://github.com/TomDemeranville/orcid-updat
 	OrcidProfile pro = client.getOrcidProfile("0000-0002-9151-6445");
 
 	//Search for profile with a DOI attached
-	OrcidSearchResults results = client.search(OrcidSearchField.WORK_ID_DOI.buildExactQuery("10.9997/abc123"));
+	OrcidSearchResults results = client.search(OrcidSearchField.DIGITAL_OBJECT_IDS.buildExactQuery("10.9997/abc123"));
+	//Search for all profiles for an ISBN
+	OrcidSearchResults results = client.search(OrcidSearchField.ISBN.buildExactQuery("10.9997/"));
+
 	//Search for all profiles with a given DOI prefix attached
-	OrcidSearchResults results = client.search(OrcidSearchField.WORK_ID_DOI.buildPrefixQuery("10.9997/"));
+	OrcidSearchResults results = client.search(OrcidSearchField.DIGITAL_OBJECT_IDS.buildPrefixQuery("10.9997/"));
+
 
 ##Private API examples
 	

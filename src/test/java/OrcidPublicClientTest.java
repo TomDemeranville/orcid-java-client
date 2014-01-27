@@ -45,7 +45,7 @@ public class OrcidPublicClientTest {
 		//THIS IS RETURNING INVALID MESSAGES - they're 1.0.23 (have an <orcid> element) despite being labeled as 1.1
 		//I've hacked a fix into the JAXB classes.
 		OrcidPublicClient client = new OrcidPublicClient();
-		String query = OrcidSearchField.WORK_ID_DOI.buildExactQuery("10.9997/abc123");
+		String query = OrcidSearchField.DIGITAL_OBJECT_IDS.buildExactQuery("10.9997/abc123");
 		assertEquals("digital-object-ids: \"10.9997/abc123\"",query);
 		OrcidSearchResults results = client.search(query);
 		assertEquals(1,results.getNumFound().intValue());
@@ -55,7 +55,7 @@ public class OrcidPublicClientTest {
 	@Test
 	public final void testSearchForDOIPrefix() throws IOException, JAXBException{	
 		OrcidPublicClient client = new OrcidPublicClient();
-		String query = OrcidSearchField.WORK_ID_DOI.buildPrefixQuery("10.9998");
+		String query = OrcidSearchField.DIGITAL_OBJECT_IDS.buildPrefixQuery("10.9998");
 		assertEquals("digital-object-ids: 10.9998*",query);
 		OrcidSearchResults results = client.search(query);
 		assertEquals(1,results.getNumFound().intValue());
@@ -65,7 +65,7 @@ public class OrcidPublicClientTest {
 	@Test
 	public final void testEmptySearch() throws IOException, JAXBException{	
 		OrcidPublicClient client = new OrcidPublicClient();
-		String query = OrcidSearchField.WORK_ID_DOI.buildPrefixQuery("10.9998DGSJHAJHLDSAG");
+		String query = OrcidSearchField.DIGITAL_OBJECT_IDS.buildPrefixQuery("10.9998DGSJHAJHLDSAG");
 		assertEquals("digital-object-ids: 10.9998DGSJHAJHLDSAG*",query);
 		OrcidSearchResults results = client.search(query);
 		assertEquals(0,results.getNumFound().intValue());
