@@ -3,12 +3,10 @@ package uk.bl.odin.orcid.client;
 import java.io.IOException;
 
 import org.restlet.ext.jaxb.JaxbRepresentation;
-import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import uk.bl.odin.orcid.client.constants.OrcidConstants;
-import uk.bl.odin.orcid.client.constants.OrcidSearchField;
 import uk.bl.odin.orcid.schema.messages.onepointone.OrcidMessage;
 import uk.bl.odin.orcid.schema.messages.onepointone.OrcidProfile;
 import uk.bl.odin.orcid.schema.messages.onepointone.OrcidSearchResults;
@@ -26,8 +24,8 @@ public class OrcidPublicClient {
 	/** Perform a search against the public ORCID API
 	 * 
 	 * @param query the 'q' GET param to send
-	 * @param page the 'page' GET param to send - starts from 0
-	 * @param pagesize the 'page' GET param to send - -1 will ommit this parameter and use ORCiD default pagesize
+	 * @param page the 'page' GET param to send, starts from 0 - -1 will ommit this paramter and use ORCiD default page (0)
+	 * @param pagesize the 'page' GET param to send - -1 will ommit this parameter and use ORCiD default pagesize (10)
 	 * @return an OrcidSearchResults object with 0 or more OrcidSearchResult children
 	 * @throws IOException if result unparsable or network unreachable.
 	 * @throws ResourceException if there's a http problem (e.g. 404, 400)

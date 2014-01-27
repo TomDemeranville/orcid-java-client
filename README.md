@@ -48,7 +48,7 @@ Add the repository to your pom.xml like so:
 	    </repository>
     </repositories>
 
-Add the dependency like this for normal containers:
+Add the dependency like this:
 
 	<dependency>
 		<groupId>uk.bl</groupId>
@@ -56,15 +56,33 @@ Add the dependency like this for normal containers:
 		<version>0.11.0</version>
 	</dependency>
 
-Or like this for Google App Engine:
+Then add in the RESTlet dependencies.  These need to be defiend by your own application as RESTlet comes in multiple versions and your application must decide which to use.  Normal containers like jetty or tomcat use the "jee" edition and that is the most common scenario. Google app engine uses the "gae" edition. There are other editions are available for jse, android.  Mine is set up like so:
+
+	<properties>
+		<!-- for google app engine -->
+		<restlet.edition>gae</restlet.edition>
+		<!-- for jetty/tomcat -->
+		<restlet.edition>jee</restlet.edition>
+		<restlet.version>2.2-M6</restlet.version>
+	</properties> 
 
 	<dependency>
-		<groupId>uk.bl</groupId>
-		<artifactId>orcid-java-client-gae</artifactId>
-		<version>0.11.2-rc1</version>
+		<groupId>org.restlet.${restlet.edition}</groupId>
+		<artifactId>org.restlet</artifactId>
+		<version>${restlet.version}</version>
 	</dependency>
 
-You can see the list of versions in the repository here: (https://github.com/TomDemeranville/orcid-java-client/tree/mvn-repo/uk/bl)
+	<dependency>
+		<groupId>org.restlet.${restlet.edition}</groupId>
+		<artifactId>org.restlet.ext.jaxb</artifactId>
+		<version>${restlet.version}</version>
+	</dependency> 
+
+	<dependency>
+	   <groupId>org.restlet.${restlet.edition}</groupId>
+	   <artifactId>org.restlet.ext.net</artifactId>
+		<version>${restlet.version}</version>
+	</dependency>
 
 #Schema support
 

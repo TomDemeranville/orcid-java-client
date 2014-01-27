@@ -7,11 +7,9 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.restlet.Response;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
-import org.restlet.data.Status;
 import org.restlet.engine.header.Header;
 import org.restlet.ext.jaxb.JaxbRepresentation;
 import org.restlet.representation.Representation;
