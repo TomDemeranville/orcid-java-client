@@ -3,10 +3,9 @@
   <groupId>uk.bl</groupId>
   <artifactId>orcid-java-client</artifactId>
   <versioning>
-    <release>0.11.3</release>
     <versions>
-      <version>0.11.3</version>
+      <version>0.11.4-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20140127155238</lastUpdated>
+    <lastUpdated>20140127155529</lastUpdated>
   </versioning>
 </metadata>

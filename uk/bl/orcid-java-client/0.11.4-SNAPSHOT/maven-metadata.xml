@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>uk.bl</groupId>
+  <artifactId>orcid-java-client</artifactId>
+  <version>0.11.4-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20140127.155529</timestamp>
+      <buildNumber>1</buildNumber>
+    </snapshot>
+    <lastUpdated>20140127155529</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>0.11.4-20140127.155529-1</value>
+        <updated>20140127155529</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>0.11.4-20140127.155529-1</value>
+        <updated>20140127155529</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+</metadata>
