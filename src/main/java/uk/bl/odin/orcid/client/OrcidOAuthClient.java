@@ -139,7 +139,7 @@ public class OrcidOAuthClient {
 	 * @throws ResourceException
 	 *             if there's a http problem (e.g. 404, 400)
 	 */
-	public OrcidAccessToken getAccessToken(String authorizationCode) throws ResourceException, IOException {
+	public OrcidAccessToken getAccessToken(String authorizationCode) throws IOException {
 		Reference ref = new Reference(apiUriToken + TOKEN_ENDPOINT);
 		ClientResource client = new ClientResource(ref);
 		Form f = new Form();
@@ -149,6 +149,8 @@ public class OrcidOAuthClient {
 		f.add("code", authorizationCode);
 		f.add("redirect_uri", redirectUri);
 		client.getContext().getParameters().add("followRedirects", "true");
+		log.fine(f.toString());
+		log.fine(client.toString());
 		Representation rep = client.post(f, MediaType.APPLICATION_JSON);
 		String json = rep.getText();
 		OrcidAccessToken token = new ObjectMapper().reader(OrcidAccessToken.class).readValue(json);
@@ -176,17 +178,19 @@ public class OrcidOAuthClient {
 		Reference ref = new Reference(apiUriV11 + "/" + token.getOrcid() + WORK_CREATE_ENDPOINT);
 		ClientResource client = new ClientResource(ref);
 		// OAUTH bearer is a pain via restlet ChallengeScheme on GAE
-		addRestletHeader(client, "Authorization", "Bearer " + token);
-
+		addRestletHeader(client, "Authorization", "Bearer " + token.getAccess_token());
+		log.info(token.getAccess_token());
 		try {
 			StringWriter sw = new StringWriter();
 			orcidMessageContext.createMarshaller().marshal(wrapWork(work), sw);
-			StringRepresentation rep = new StringRepresentation(sw.getBuffer(), OrcidConstants.APPLICATION_ORCID_XML);
+			log.fine(sw.toString());
+			StringRepresentation rep = new StringRepresentation(sw.toString(), OrcidConstants.APPLICATION_ORCID_XML);
 			client.post(rep);
 		} catch (JAXBException e) {
-			log.info("problem marshalling response "+e.getMessage());
+			log.fine("problem marshalling response "+e.getMessage());
 			throw new IOException(e);
-		}
+		} 
+		//TODO: catch the 500 and extract the following! {"message-version":"1.2_rc3","error-desc":{"value":"Invalid authorization code: Me82Dc"}}
 	}
 
 	/**
