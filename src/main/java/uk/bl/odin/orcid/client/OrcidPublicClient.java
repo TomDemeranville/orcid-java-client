@@ -92,6 +92,10 @@ public class OrcidPublicClient {
 	public OrcidSearchResults search(String query) throws IOException {
 		return search(query, -1, -1);
 	}
+	
+	public OrcidSearchResults search(SearchKey query) throws IOException {
+		return search(query.getQuery(), query.getPage(), query.getPagesize());
+	}
 
 	private OrcidProfile getProfile(String orcid, String profileType) throws IOException, ResourceException {
 		if (profileType == null)
@@ -104,6 +108,7 @@ public class OrcidPublicClient {
 			return message.getOrcidProfile();
 		} catch (JAXBException e) {
 			log.info("Problem unmarshalling return value " + e);
+			log.info(res.toString());
 			throw new IOException(e);
 		}
 	}

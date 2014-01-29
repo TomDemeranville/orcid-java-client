@@ -41,7 +41,7 @@ public enum OrcidExternalIdentifierType {
 	        }
 	      }
 	    }
-	    throw new IllegalArgumentException("invlaid idtype");
+	    throw new IllegalArgumentException("Invalid identifier type");
 	  }
 	
 	public OrcidSearchField toOrcidSearchField(){

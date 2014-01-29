@@ -1,5 +1,7 @@
 package uk.bl.odin.orcid.client.constants;
 
+import uk.bl.odin.orcid.client.SearchType;
+
 /** Models orcid search vocabulary.
  * @see http://support.orcid.org/knowledgebase/articles/132354-searching-with-the-public-api
  * Note, above inaccurate.
@@ -66,6 +68,14 @@ public enum OrcidSearchField {
 	private OrcidSearchField(final String s) { stringValue = s; }
 	public String toString() { return stringValue; }
 	
+	public final String buildQuery(SearchType type, String term){
+		if (type.equals(SearchType.EXACT))
+				return buildExactQuery(term);
+		else if(type.equals(SearchType.PREFIX))
+			return buildPrefixQuery(term);
+		else
+			return buildSolrQuery(term);
+	}
 	/** Constructs a param suitable for use as a query that EXACTLY matches term
 	 * 
 	 * @param field
@@ -84,6 +94,10 @@ public enum OrcidSearchField {
 	 */
 	public final String buildPrefixQuery(String term) {
 		return this.toString() + ": " + term + "*";
+	}
+	
+	public final String buildSolrQuery(String term) {
+		return this.toString() + ": " + term;
 	}
 	
 	public static OrcidSearchField fromString(String text) {
