@@ -82,6 +82,8 @@ The version supports the ORCiD message schema 1.1
 
 #Contact
 
+There are people actively using this library that can be found on the orcid-api-users@googlegroups.com mailing list
+
 [@tomdemeranville on twitter](https://twitter.com/tomdemeranville)
 
 [My blog](http://demeranville.com)
