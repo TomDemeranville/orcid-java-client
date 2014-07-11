@@ -10,8 +10,10 @@ import javax.inject.Named;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 
+import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Parameter;
 import org.restlet.data.Reference;
 import org.restlet.engine.header.Header;
 import org.restlet.representation.Representation;
@@ -50,9 +52,10 @@ public class OrcidOAuthClient {
 	private static final String TOKEN_ENDPOINT = "/oauth/token";
 	private static final String WORK_CREATE_ENDPOINT = "/orcid-works";
 
-	private static final String SANDBOX_LOGIN_URI = "https://sandbox-1.orcid.org";
-	private static final String SANDBOX_API_URI_TOKEN = "https://api.sandbox-1.orcid.org";
-	private static final String SANDBOX_API_URI_V1_1 = "http://api.sandbox-1.orcid.org/v1.1";
+	private static final String SANDBOX_LOGIN_URI = "https://sandbox.orcid.org";
+	private static final String SANDBOX_API_URI_TOKEN = "https://api.sandbox.orcid.org";
+	private static final String SANDBOX_API_URI_V1_1 = "http://api.sandbox.orcid.org/v1.1";
+	
 	private static final String LIVE_LOGIN_URI = "https://orcid.org";
 	private static final String LIVE_API_URI_TOKEN = "https://api.orcid.org";
 	private static final String LIVE_API_URI_V1_1 = "http://api.orcid.org/v1.1";
@@ -156,6 +159,25 @@ public class OrcidOAuthClient {
 		OrcidAccessToken token = new ObjectMapper().reader(OrcidAccessToken.class).readValue(json);
 		return token;
 	}
+	
+	/** Fetch an access token that enables the creation of ORCiD profiles
+	 * 
+	 * @return
+	 * @throws IOException 
+	 */
+	public OrcidAccessToken getCreateProfileAccessToken() throws IOException{
+		Reference ref = new Reference(apiUriToken + TOKEN_ENDPOINT);
+		ClientResource client = new ClientResource(ref);
+		Form f = new Form();
+		f.add("client_id", clientID);
+		f.add("client_secret", clientSecret);
+		f.add("scope", OrcidAuthScope.CREATE_PROFILE.toString());
+		f.add("grant_type", "client_credentials");		
+		Representation rep = client.post(f, MediaType.APPLICATION_JSON);
+		String json = rep.getText();
+		OrcidAccessToken token = new ObjectMapper().reader(OrcidAccessToken.class).readValue(json);
+		return token;
+	}
 
 	/**
 	 * Adds a research activity to the ORCID Record. requires
@@ -192,6 +214,12 @@ public class OrcidOAuthClient {
 		} 
 		//TODO: catch the 500 and extract the following! {"message-version":"1.2_rc3","error-desc":{"value":"Invalid authorization code: Me82Dc"}}
 	}
+	
+	
+	public void addOrcidProfile(){
+		
+	}
+
 
 	/**
 	 * Completely replaces all fields of the bio marked as PUBLIC or LIMITED in

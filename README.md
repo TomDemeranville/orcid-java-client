@@ -57,7 +57,7 @@ Add the dependency like this:
 	<dependency>
 		<groupId>uk.bl</groupId>
 		<artifactId>orcid-java-client/artifactId>
-		<version>0.11.2</version>
+		<version>0.11.6</version>
 	</dependency>
 
 The latest versions can be found in the repository, here: (https://github.com/TomDemeranville/orcid-java-client/tree/mvn-repo/uk/bl/orcid-java-client)
