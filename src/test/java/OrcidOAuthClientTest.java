@@ -9,6 +9,7 @@ import org.junit.Test;
 import uk.bl.odin.orcid.client.OrcidAccessToken;
 import uk.bl.odin.orcid.client.OrcidOAuthClient;
 import uk.bl.odin.orcid.client.constants.OrcidAuthScope;
+import static org.junit.Assert.*;
 
 
 
@@ -35,7 +36,7 @@ public class OrcidOAuthClientTest {
 				properties.getProperty("orcidClientSecret"), properties.getProperty("orcidReturnUri"),
 				Boolean.valueOf(properties.getProperty("orcidSandbox")));
 		OrcidAccessToken tok = client.getCreateProfileAccessToken();
-		System.out.print(tok.getAccess_token());
+		assertNotNull(tok.getAccess_token());
 	}
 	
 }
