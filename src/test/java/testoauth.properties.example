@@ -1,0 +1,11 @@
+orcidClientID = XXXX-XXXX-XXXX-XXXX
+orcidClientSecret = XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+orcidReturnUri = http://XXXX.com/
+orcidSandbox = true
+
+orcidUsername = XXXX@XXXX.com
+orcidPassword = XXXX
+orcidNumber = XXXX-XXXX-XXXX-XXXX
+orcidWorkIdentifier = uk.bl.ethos.XXXXXX
+	
+chromeDriverLocation = /path/to/chromedriver
