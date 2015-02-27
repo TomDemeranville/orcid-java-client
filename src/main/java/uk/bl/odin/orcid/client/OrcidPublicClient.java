@@ -14,9 +14,9 @@ import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
 import uk.bl.odin.orcid.client.constants.OrcidConstants;
-import uk.bl.odin.orcid.schema.messages.onepointone.OrcidMessage;
-import uk.bl.odin.orcid.schema.messages.onepointone.OrcidProfile;
-import uk.bl.odin.orcid.schema.messages.onepointone.OrcidSearchResults;
+import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidMessage;
+import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidProfile;
+import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidSearchResults;
 
 /**
  * Orcid client that fetches profiles and performs searches using the (LIVE)
