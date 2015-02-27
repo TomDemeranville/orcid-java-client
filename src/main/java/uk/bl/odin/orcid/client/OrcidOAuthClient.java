@@ -144,6 +144,9 @@ public class OrcidOAuthClient {
 	 */
 	public OrcidAccessToken getAccessToken(String authorizationCode) throws IOException {
 		Reference ref = new Reference(apiUriToken + TOKEN_ENDPOINT);
+		if (Context.getCurrent() == null) {
+			Context.setCurrent(new Context());
+		}
 		ClientResource client = new ClientResource(ref);
 		Form f = new Form();
 		f.add("client_id", clientID);
