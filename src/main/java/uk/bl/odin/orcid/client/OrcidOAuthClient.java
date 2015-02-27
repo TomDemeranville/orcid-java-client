@@ -38,9 +38,9 @@ import com.google.common.base.Joiner;
  * General purpose ORCID client that supports simple OAuth scenarios
  * 
  * @see http://support.orcid.org/knowledgebase/articles/116874-orcid-api-guide
- *      Uses message 1.1
+ *      Uses message 1.2
  *      https://raw.github.com/ORCID/ORCID-Source/master/orcid-model
- *      /src/main/resources/orcid-message-1.1.xsd
+ *      /src/main/resources/orcid-message-1.2.xsd
  */
 @SuppressWarnings("restriction")
 public class OrcidOAuthClient {
@@ -55,11 +55,11 @@ public class OrcidOAuthClient {
 
 	private static final String SANDBOX_LOGIN_URI = "https://sandbox.orcid.org";
 	private static final String SANDBOX_API_URI_TOKEN = "https://api.sandbox.orcid.org";
-	private static final String SANDBOX_API_URI_V1_1 = "http://api.sandbox.orcid.org/v1.1";
+	private static final String SANDBOX_API_URI_V1_2 = "http://api.sandbox.orcid.org/v1.2";
 	
 	private static final String LIVE_LOGIN_URI = "https://orcid.org";
 	private static final String LIVE_API_URI_TOKEN = "https://api.orcid.org";
-	private static final String LIVE_API_URI_V1_1 = "http://api.orcid.org/v1.1";
+	private static final String LIVE_API_URI_V1_2 = "http://api.orcid.org/v1.2";
 
 	private final String clientID;
 	private final String clientSecret;
@@ -67,7 +67,7 @@ public class OrcidOAuthClient {
 
 	private final String loginUri;
 	private final String apiUriToken;
-	private final String apiUriV11;
+	private final String apiUriV12;
 
 	private final JAXBContext orcidMessageContext;
 
@@ -93,11 +93,11 @@ public class OrcidOAuthClient {
 		if (sandbox) {
 			this.loginUri = SANDBOX_LOGIN_URI;
 			this.apiUriToken = SANDBOX_API_URI_TOKEN;
-			this.apiUriV11 = SANDBOX_API_URI_V1_1;
+			this.apiUriV12 = SANDBOX_API_URI_V1_2;
 		} else {
 			this.loginUri = LIVE_LOGIN_URI;
 			this.apiUriToken = LIVE_API_URI_TOKEN;
-			this.apiUriV11 = LIVE_API_URI_V1_1;
+			this.apiUriV12 = LIVE_API_URI_V1_2;
 		}
 		this.clientID = clientID;
 		this.clientSecret = clientSecret;
@@ -196,7 +196,7 @@ public class OrcidOAuthClient {
 	 * @throws JAXBException
 	 */
 	public OrcidProfile getProfile(OrcidAccessToken token) throws IOException, JAXBException {
-		Reference ref = new Reference(apiUriV11 + "/" + token.getOrcid() + READ_PROFILE_ENDPOINT);
+		Reference ref = new Reference(apiUriV12 + "/" + token.getOrcid() + READ_PROFILE_ENDPOINT);
 		ClientResource client = new ClientResource(ref);
 		addRestletHeader(client, "Authorization", "Bearer " + token.getAccess_token());
 		Representation representation = client.get();
@@ -218,7 +218,7 @@ public class OrcidOAuthClient {
 	 * @throws JAXBException
 	 */
 	public OrcidBio getBio(OrcidAccessToken token) throws IOException, JAXBException {
-		Reference ref = new Reference(apiUriV11 + "/" + token.getOrcid() + READ_BIO_ENDPOINT);
+		Reference ref = new Reference(apiUriV12 + "/" + token.getOrcid() + READ_BIO_ENDPOINT);
 		ClientResource client = new ClientResource(ref);
 		addRestletHeader(client, "Authorization", "Bearer " + token.getAccess_token());
 		Representation representation = client.get();
@@ -245,7 +245,7 @@ public class OrcidOAuthClient {
 	 *             if there's a http problem (e.g. 404, 400)
 	 */
 	public void appendWork(OrcidAccessToken token, OrcidWork work) throws ResourceException, IOException {
-		Reference ref = new Reference(apiUriV11 + "/" + token.getOrcid() + WORK_CREATE_ENDPOINT);
+		Reference ref = new Reference(apiUriV12 + "/" + token.getOrcid() + WORK_CREATE_ENDPOINT);
 		ClientResource client = new ClientResource(ref);
 		// OAUTH bearer is a pain via restlet ChallengeScheme on GAE
 		addRestletHeader(client, "Authorization", "Bearer " + token.getAccess_token());

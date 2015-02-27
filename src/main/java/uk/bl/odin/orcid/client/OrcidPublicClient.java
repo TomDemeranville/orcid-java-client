@@ -27,7 +27,7 @@ public class OrcidPublicClient {
 
 	private static final Logger log = Logger.getLogger(OrcidPublicClient.class.getName());
 
-	private static final String PUBLIC_URI_V11 = "http://pub.orcid.org/v1.1";
+	private static final String PUBLIC_URI_V12 = "http://pub.orcid.org/v1.2";
 	private static final String SEARCH_ENDPOINT = "/search/orcid-bio/";
 
 	private static final String TYPE_ORCID_BIO = "orcid-bio";
@@ -61,7 +61,7 @@ public class OrcidPublicClient {
 	public OrcidSearchResults search(String query, int page, int pagesize) throws IOException {
 		if (query == null || query.isEmpty())
 			throw new IllegalArgumentException();
-		ClientResource res = new ClientResource(PUBLIC_URI_V11 + SEARCH_ENDPOINT);
+		ClientResource res = new ClientResource(PUBLIC_URI_V12 + SEARCH_ENDPOINT);
 		res.accept(OrcidConstants.APPLICATION_ORCID_XML);
 		res.addQueryParameter("q", query);
 		if (pagesize >= 0)
@@ -100,7 +100,7 @@ public class OrcidPublicClient {
 	private OrcidProfile getProfile(String orcid, String profileType) throws IOException, ResourceException {
 		if (profileType == null)
 			throw new IllegalArgumentException();
-		ClientResource res = new ClientResource(PUBLIC_URI_V11 + "/" + orcid + "/" + profileType);
+		ClientResource res = new ClientResource(PUBLIC_URI_V12 + "/" + orcid + "/" + profileType);
 		res.accept(OrcidConstants.APPLICATION_ORCID_XML);
 		try {
 			Unmarshaller um = orcidMessageContext.createUnmarshaller();
