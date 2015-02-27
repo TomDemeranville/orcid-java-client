@@ -2,16 +2,21 @@ package uk.bl.odin.orcid.client;
 
 /**
  * Models the OAuth token response from ORCID. example:
- * {"access_token":"4511576a-eaa1-48a4-b282-4fab5f889f87",
- * "token_type":"bearer", "refresh_token":"77256874-2036-41c9-9800-fe56b5e9a2a4"
- * , "expires_in":3599, "scope":"/orcid-works/update",
- * "orcid":"0000-0003-1495-7122"}
+ * {
+ *      "name":"John Doe"
+ *      "access_token":"4511576a-eaa1-48a4-b282-4fab5f889f87",
+ *      "expires_in":3599, "scope":"/orcid-works/update",
+ *      "token_type":"bearer",
+ *      "orcid":"0000-0003-1495-7122",
+ *      "scope":"/orcid-profile/read-limited"
+ * }
  * 
  * @author tom
  * 
  */
 public class OrcidAccessToken {
 
+	private String name;
 	private String access_token;
 	private String token_type;
 	private String refresh_token;
@@ -21,6 +26,14 @@ public class OrcidAccessToken {
 
 	// keeps track of doc requested by user. optional.
 	private String state;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public String getAccess_token() {
 		return access_token;
