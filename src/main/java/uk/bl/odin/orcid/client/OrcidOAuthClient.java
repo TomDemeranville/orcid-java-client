@@ -50,6 +50,8 @@ public class OrcidOAuthClient {
 
 	private static final String AUTHZ_ENDPOINT = "/oauth/authorize";
 	private static final String TOKEN_ENDPOINT = "/oauth/token";
+	private static final String READ_PROFILE_ENDPOINT = "/orcid-profile";
+	private static final String READ_BIO_ENDPOINT = "/orcid-bio";
 	private static final String WORK_CREATE_ENDPOINT = "/orcid-works";
 
 	private static final String SANDBOX_LOGIN_URI = "https://sandbox.orcid.org";
@@ -180,6 +182,50 @@ public class OrcidOAuthClient {
 		String json = rep.getText();
 		OrcidAccessToken token = new ObjectMapper().reader(OrcidAccessToken.class).readValue(json);
 		return token;
+	}
+
+	/**
+	 * Reads the entire ORCID record for the specified access token.
+	 * Requires {@link OrcidAuthScope#READ_PROFILE}
+	 *
+	 * @param token
+	 *      A valid access token, must not be {@code null}.
+	 * @return
+	 *      The entire profile of the authenticated ORCID user, never {@code null}.
+	 *
+	 * @throws IOException
+	 * @throws JAXBException
+	 */
+	public OrcidProfile getProfile(OrcidAccessToken token) throws IOException, JAXBException {
+		Reference ref = new Reference(apiUriV11 + "/" + token.getOrcid() + READ_PROFILE_ENDPOINT);
+		ClientResource client = new ClientResource(ref);
+		addRestletHeader(client, "Authorization", "Bearer " + token.getAccess_token());
+		Representation representation = client.get();
+		OrcidMessage message =
+				(OrcidMessage) orcidMessageContext.createUnmarshaller().unmarshal(representation.getStream());
+		return message.getOrcidProfile();
+	}
+
+	/**
+	 * Reads the biographical data for the specified access token.
+	 * Requires {@link OrcidAuthScope#READ_BIO}
+	 *
+	 * @param token
+	 *      A valid access token, must not be {@code null}.
+	 * @return
+	 *      The biographical of the authenticated ORCID user, never {@code null}.
+	 *
+	 * @throws IOException
+	 * @throws JAXBException
+	 */
+	public OrcidBio getBio(OrcidAccessToken token) throws IOException, JAXBException {
+		Reference ref = new Reference(apiUriV11 + "/" + token.getOrcid() + READ_BIO_ENDPOINT);
+		ClientResource client = new ClientResource(ref);
+		addRestletHeader(client, "Authorization", "Bearer " + token.getAccess_token());
+		Representation representation = client.get();
+		OrcidMessage message =
+				(OrcidMessage) orcidMessageContext.createUnmarshaller().unmarshal(representation.getStream());
+		return message.getOrcidProfile().getOrcidBio();
 	}
 
 	/**
