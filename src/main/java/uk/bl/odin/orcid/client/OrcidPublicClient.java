@@ -59,15 +59,18 @@ public class OrcidPublicClient {
 	 *             if there's a http problem (e.g. 404, 400, 500)
 	 */
 	public OrcidSearchResults search(String query, int page, int pagesize) throws IOException {
-		if (query == null || query.isEmpty())
+		if (query == null || query.isEmpty()) {
 			throw new IllegalArgumentException();
+		}
 		ClientResource res = new ClientResource(PUBLIC_URI_V12 + SEARCH_ENDPOINT);
 		res.accept(OrcidConstants.APPLICATION_ORCID_XML);
 		res.addQueryParameter("q", query);
-		if (pagesize >= 0)
+		if (pagesize >= 0) {
 			res.addQueryParameter("rows", Integer.toString(pagesize));
-		if (page >= 0)
+		}
+		if (page >= 0) {
 			res.addQueryParameter("start", Integer.toString(page));
+		}
 
 		//this will throw any non-2XX http code as a ResourceException
 		//note GAE thows internal errors in the 1XXX range!
@@ -81,8 +84,9 @@ public class OrcidPublicClient {
 				OrcidSearchResults r = new OrcidSearchResults();
 				r.setNumFound(BigInteger.ZERO);
 				return r;
-			} else
+			} else {
 				return message.getOrcidSearchResults();
+			}
 		} catch (JAXBException e) {
 			log.info("Problem unmarshalling return value " + e);
 			throw new IOException(e);
@@ -98,8 +102,9 @@ public class OrcidPublicClient {
 	}
 
 	private OrcidProfile getProfile(String orcid, String profileType) throws IOException, ResourceException {
-		if (profileType == null)
+		if (profileType == null) {
 			throw new IllegalArgumentException();
+		}
 		ClientResource res = new ClientResource(PUBLIC_URI_V12 + "/" + orcid + "/" + profileType);
 		res.accept(OrcidConstants.APPLICATION_ORCID_XML);
 		try {
