@@ -12,6 +12,7 @@
 		<restlet.edition>gae</restlet.edition>
 		<restlet.version>2.2-M6</restlet.version>
 		<github.global.server>github</github.global.server>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties> 
 	
 	<licenses>
