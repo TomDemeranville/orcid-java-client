@@ -2,20 +2,16 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.restlet.representation.Representation;
-import org.restlet.resource.Resource;
 
 import uk.bl.odin.orcid.client.OrcidPublicClient;
 import uk.bl.odin.orcid.client.constants.OrcidSearchField;
-import uk.bl.odin.orcid.schema.messages.onepointone.OrcidProfile;
-import uk.bl.odin.orcid.schema.messages.onepointone.OrcidSearchResults;
+import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidId;
+import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidProfile;
+import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidSearchResults;
 
 
 public class OrcidPublicClientTest {
@@ -28,15 +24,15 @@ public class OrcidPublicClientTest {
 		OrcidProfile bio = client.getOrcidBio("0000-0002-9151-6445");
 		assertEquals("Unit",bio.getOrcidBio().getPersonalDetails().getGivenNames());
 		assertEquals("Test",bio.getOrcidBio().getPersonalDetails().getFamilyName());
-		assertNull(bio.getOrcidActivities().getOrcidWorks());
-		assertEquals(bio.getOrcidIdentifier().getPath(),"0000-0002-9151-6445");
+		assertNull(bio.getOrcidActivities());
+		assertEquals(getPathFromOrcidId(bio.getOrcidIdentifier()),"0000-0002-9151-6445");
 	
 		//with works
 		OrcidProfile pro = client.getOrcidProfile("0000-0002-9151-6445");
 		assertEquals("Unit",pro.getOrcidBio().getPersonalDetails().getGivenNames());
 		assertEquals("Test",pro.getOrcidBio().getPersonalDetails().getFamilyName());
 		assertEquals(pro.getOrcidActivities().getOrcidWorks().getOrcidWork().size(),2);
-		assertEquals(pro.getOrcidIdentifier().getPath(),"0000-0002-9151-6445");		
+		assertEquals(getPathFromOrcidId(pro.getOrcidIdentifier()),"0000-0002-9151-6445");
 		
 	}
 	
@@ -49,7 +45,8 @@ public class OrcidPublicClientTest {
 		assertEquals("digital-object-ids: \"10.9997/abc123\"",query);
 		OrcidSearchResults results = client.search(query);
 		assertEquals(1,results.getNumFound().intValue());
-		assertEquals(results.getOrcidSearchResult().get(0).getOrcidProfile().getOrcidIdentifier().getPath(),"0000-0002-9151-6445");
+		assertEquals(getPathFromOrcidId(results.getOrcidSearchResult().get(0).getOrcidProfile().getOrcidIdentifier()),
+				"0000-0002-9151-6445");
 	}
 	
 	@Test
@@ -59,7 +56,8 @@ public class OrcidPublicClientTest {
 		assertEquals("digital-object-ids: 10.9998*",query);
 		OrcidSearchResults results = client.search(query);
 		assertEquals(1,results.getNumFound().intValue());
-		assertEquals(results.getOrcidSearchResult().get(0).getOrcidProfile().getOrcidIdentifier().getPath(),"0000-0002-9151-6445");
+		assertEquals(getPathFromOrcidId(results.getOrcidSearchResult().get(0).getOrcidProfile().getOrcidIdentifier()),
+				"0000-0002-9151-6445");
 	}
 	
 	@Test
@@ -69,6 +67,16 @@ public class OrcidPublicClientTest {
 		assertEquals("digital-object-ids: 10.9998DGSJHAJHLDSAG*",query);
 		OrcidSearchResults results = client.search(query);
 		assertEquals(0,results.getNumFound().intValue());
+	}
+
+	private String getPathFromOrcidId(OrcidId orcidId) {
+		for (JAXBElement<String> element : orcidId.getContent()) {
+			if (element.getName().getLocalPart().equals("path")) {
+				return element.getValue();
+			}
+		}
+
+		return "";
 	}
 	
 }

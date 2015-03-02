@@ -13,7 +13,6 @@ import javax.xml.bind.JAXBException;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Parameter;
 import org.restlet.data.Reference;
 import org.restlet.engine.header.Header;
 import org.restlet.representation.Representation;
@@ -25,23 +24,23 @@ import org.restlet.util.Series;
 import uk.bl.odin.orcid.client.constants.OrcidAuthScope;
 import uk.bl.odin.orcid.client.constants.OrcidConstants;
 import uk.bl.odin.orcid.client.constants.OrcidExternalIdentifierType;
-import uk.bl.odin.orcid.schema.messages.onepointone.OrcidActivities;
-import uk.bl.odin.orcid.schema.messages.onepointone.OrcidBio;
-import uk.bl.odin.orcid.schema.messages.onepointone.OrcidMessage;
-import uk.bl.odin.orcid.schema.messages.onepointone.OrcidProfile;
-import uk.bl.odin.orcid.schema.messages.onepointone.OrcidWork;
-import uk.bl.odin.orcid.schema.messages.onepointone.OrcidWorks;
+import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidActivities;
+import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidBio;
+import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidMessage;
+import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidProfile;
+import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidWork;
+import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidWorks;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Joiner;
 
 /**
  * General purpose ORCID client that supports simple OAuth scenarios
- * 
- * @see http://support.orcid.org/knowledgebase/articles/116874-orcid-api-guide
- *      Uses message 1.1
- *      https://raw.github.com/ORCID/ORCID-Source/master/orcid-model
- *      /src/main/resources/orcid-message-1.1.xsd
+ *
+ * Uses message 1.2
+ * https://raw.github.com/ORCID/ORCID-Source/master/orcid-model/src/main/resources/orcid-message-1.2.xsd
+ *
+ * @see <a href='http://support.orcid.org/knowledgebase/articles/116874-orcid-api-guide'>ORCID API Guide</a>
  */
 @SuppressWarnings("restriction")
 public class OrcidOAuthClient {
@@ -56,11 +55,11 @@ public class OrcidOAuthClient {
 
 	private static final String SANDBOX_LOGIN_URI = "https://sandbox.orcid.org";
 	private static final String SANDBOX_API_URI_TOKEN = "https://api.sandbox.orcid.org";
-	private static final String SANDBOX_API_URI_V1_1 = "http://api.sandbox.orcid.org/v1.1";
+	private static final String SANDBOX_API_URI_V1_2 = "http://api.sandbox.orcid.org/v1.2";
 	
 	private static final String LIVE_LOGIN_URI = "https://orcid.org";
 	private static final String LIVE_API_URI_TOKEN = "https://api.orcid.org";
-	private static final String LIVE_API_URI_V1_1 = "http://api.orcid.org/v1.1";
+	private static final String LIVE_API_URI_V1_2 = "http://api.orcid.org/v1.2";
 
 	private final String clientID;
 	private final String clientSecret;
@@ -68,7 +67,7 @@ public class OrcidOAuthClient {
 
 	private final String loginUri;
 	private final String apiUriToken;
-	private final String apiUriV11;
+	private final String apiUriV12;
 
 	private final JAXBContext orcidMessageContext;
 
@@ -89,16 +88,17 @@ public class OrcidOAuthClient {
 	@Inject
 	public OrcidOAuthClient(@Named("OrcidClientID") String clientID, @Named("OrcidClientSecret") String clientSecret,
 			@Named("OrcidReturnURI") String redirectUri, @Named("OrcidSandbox") boolean sandbox) throws JAXBException {
-		if (clientID == null || clientSecret == null || redirectUri == null)
+		if (clientID == null || clientSecret == null || redirectUri == null) {
 			throw new IllegalArgumentException("cannot create OrcidOAuthClient - missing init parameter(s)");
+		}
 		if (sandbox) {
 			this.loginUri = SANDBOX_LOGIN_URI;
 			this.apiUriToken = SANDBOX_API_URI_TOKEN;
-			this.apiUriV11 = SANDBOX_API_URI_V1_1;
+			this.apiUriV12 = SANDBOX_API_URI_V1_2;
 		} else {
 			this.loginUri = LIVE_LOGIN_URI;
 			this.apiUriToken = LIVE_API_URI_TOKEN;
-			this.apiUriV11 = LIVE_API_URI_V1_1;
+			this.apiUriV12 = LIVE_API_URI_V1_2;
 		}
 		this.clientID = clientID;
 		this.clientSecret = clientSecret;
@@ -108,6 +108,15 @@ public class OrcidOAuthClient {
 
 	/**
 	 * Create a URL that can be used to request an accessCode
+	 *
+	 * @param state
+	 *      A value which is included in the return URI
+	 *      May be {@code null}, but should be used to prevent cross-site request forgery.
+	 *
+	 * @param scope
+	 *      The requested AuthScope.
+	 *
+	 * @see <a href='http://support.orcid.org/knowledgebase/articles/120107-get-oauth-authorize'>GET oauth/authorize</a>
 	 */
 	public String getAuthzCodeRequest(String state, OrcidAuthScope scope) {
 		return getAuthzCodeRequest(state) + "&scope=" + scope.toString();
@@ -115,6 +124,15 @@ public class OrcidOAuthClient {
 
 	/**
 	 * Create a URL that can be used to request an accessCode
+	 *
+	 * @param state
+	 *      A value which is included in the return URI
+	 *      May be {@code null}, but should be used to prevent cross-site request forgery.
+	 *
+	 * @param scopes
+	 *      The requested AuthScopes.
+	 *
+	 * @see <a href='http://support.orcid.org/knowledgebase/articles/120107-get-oauth-authorize'>GET oauth/authorize</a>
 	 */
 	public String getAuthzCodeRequest(String state, List<OrcidAuthScope> scopes) {
 		return getAuthzCodeRequest(state) + "&scope=" + Joiner.on(" ").join(scopes);
@@ -124,8 +142,9 @@ public class OrcidOAuthClient {
 		String req = loginUri + AUTHZ_ENDPOINT;
 		req += "?client_id=" + clientID;
 		req += "&response_type=code";
-		if (state != null)
+		if (state != null) {
 			req += "&state=" + state;
+		}
 		req += "&redirect_uri=" + redirectUri;
 		return req;
 	}
@@ -133,11 +152,15 @@ public class OrcidOAuthClient {
 	/**
 	 * Exchange and authorization code for an auth token from ORCID
 	 * 
-	 * @see http://support.orcid.org/knowledgebase/articles/120107
-	 * @see http 
-	 *      ://support.orcid.org/knowledgebase/articles/179969-methods-to-generate
-	 *      -an-access-token-for-testing
+	 * @see <a href='http://support.orcid.org/knowledgebase/articles/120107'>GET oauth/authorize</a>
+	 * @see
+	 * <a href='http://support.orcid.org/knowledgebase/articles/179969-methods-to-generate-an-access-token-for-testing'>
+	 *     Methods to Generate an Access Token for Testing</a>
+	 *
 	 * @param authorizationCode
+	 *      The authorization code returned from a request built with
+	 *      {@link #getAuthzCodeRequest(String, OrcidAuthScope)}
+	 *
 	 * @return the parsed response
 	 * @throws IOException
 	 *             if result unparsable or network unreachable.
@@ -161,8 +184,7 @@ public class OrcidOAuthClient {
 		log.fine(client.toString());
 		Representation rep = client.post(f, MediaType.APPLICATION_JSON);
 		String json = rep.getText();
-		OrcidAccessToken token = new ObjectMapper().reader(OrcidAccessToken.class).readValue(json);
-		return token;
+		return new ObjectMapper().reader(OrcidAccessToken.class).readValue(json);
 	}
 	
 	/** Fetch an access token that enables the creation of ORCiD profiles
@@ -180,8 +202,7 @@ public class OrcidOAuthClient {
 		f.add("grant_type", "client_credentials");		
 		Representation rep = client.post(f, MediaType.APPLICATION_JSON);
 		String json = rep.getText();
-		OrcidAccessToken token = new ObjectMapper().reader(OrcidAccessToken.class).readValue(json);
-		return token;
+		return new ObjectMapper().reader(OrcidAccessToken.class).readValue(json);
 	}
 
 	/**
@@ -197,7 +218,7 @@ public class OrcidOAuthClient {
 	 * @throws JAXBException
 	 */
 	public OrcidProfile getProfile(OrcidAccessToken token) throws IOException, JAXBException {
-		Reference ref = new Reference(apiUriV11 + "/" + token.getOrcid() + READ_PROFILE_ENDPOINT);
+		Reference ref = new Reference(apiUriV12 + "/" + token.getOrcid() + READ_PROFILE_ENDPOINT);
 		ClientResource client = new ClientResource(ref);
 		addRestletHeader(client, "Authorization", "Bearer " + token.getAccess_token());
 		Representation representation = client.get();
@@ -219,7 +240,7 @@ public class OrcidOAuthClient {
 	 * @throws JAXBException
 	 */
 	public OrcidBio getBio(OrcidAccessToken token) throws IOException, JAXBException {
-		Reference ref = new Reference(apiUriV11 + "/" + token.getOrcid() + READ_BIO_ENDPOINT);
+		Reference ref = new Reference(apiUriV12 + "/" + token.getOrcid() + READ_BIO_ENDPOINT);
 		ClientResource client = new ClientResource(ref);
 		addRestletHeader(client, "Authorization", "Bearer " + token.getAccess_token());
 		Representation representation = client.get();
@@ -229,15 +250,13 @@ public class OrcidOAuthClient {
 	}
 
 	/**
-	 * Adds a research activity to the ORCID Record. requires
+	 * Adds a research activity to the ORCID Record. Requires
 	 * OrcidAuthScope.CREATE_WORKS scope
 	 * 
-	 * @see http 
-	 *      ://support.orcid.org/knowledgebase/articles/177528-add-works-technical
-	 *      -developer
-	 * @see http
-	 *      ://support.orcid.org/knowledgebase/articles/171893-tutorial-add-
-	 *      works -with-curl
+	 * @see <a href='http://support.orcid.org/knowledgebase/articles/177528-add-works-technical-developer'>
+	 *     Add Information: Technical Developer</a>
+	 * @see <a href='http://support.orcid.org/knowledgebase/articles/171893-tutorial-add-works -with-curl'>
+	 *     Tutorial: Add Works with cURL</a>
 	 * @param token
 	 *            containing a valid auth token and orcid
 	 * @throws IOException
@@ -246,7 +265,7 @@ public class OrcidOAuthClient {
 	 *             if there's a http problem (e.g. 404, 400)
 	 */
 	public void appendWork(OrcidAccessToken token, OrcidWork work) throws ResourceException, IOException {
-		Reference ref = new Reference(apiUriV11 + "/" + token.getOrcid() + WORK_CREATE_ENDPOINT);
+		Reference ref = new Reference(apiUriV12 + "/" + token.getOrcid() + WORK_CREATE_ENDPOINT);
 		ClientResource client = new ClientResource(ref);
 		// OAUTH bearer is a pain via restlet ChallengeScheme on GAE
 		addRestletHeader(client, "Authorization", "Bearer " + token.getAccess_token());
@@ -326,7 +345,7 @@ public class OrcidOAuthClient {
 	/**
 	 * Wrap an OrcidWork inside an otherwise empty OrcidMessage
 	 */
-	private static final OrcidMessage wrapWork(OrcidWork work) {
+	private static OrcidMessage wrapWork(OrcidWork work) {
 		OrcidWorks works = new OrcidWorks();
 		works.getOrcidWork().add(work);
 		OrcidActivities activities = new OrcidActivities();
@@ -343,7 +362,7 @@ public class OrcidOAuthClient {
 	 * Adds a HTTP header to a Restlet ClientResource OAUTH bearer is a pain via
 	 * restlet on GAE, so we set it ourselves.
 	 */
-	public static final void addRestletHeader(ClientResource client, String key, String value) {
+	public static void addRestletHeader(ClientResource client, String key, String value) {
 		@SuppressWarnings("unchecked")
 		Series<Header> headers = (Series<Header>) client.getRequestAttributes().get("org.restlet.http.headers");
 		if (headers == null) {
