@@ -1,15 +1,7 @@
 package uk.bl.odin.orcid.client;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.List;
-import java.util.logging.Logger;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Joiner;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
@@ -20,7 +12,7 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 import org.restlet.util.Series;
-
+import uk.bl.odin.orcid.client.constants.OrcidApiType;
 import uk.bl.odin.orcid.client.constants.OrcidAuthScope;
 import uk.bl.odin.orcid.client.constants.OrcidConstants;
 import uk.bl.odin.orcid.client.constants.OrcidExternalIdentifierType;
@@ -31,8 +23,14 @@ import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidProfile;
 import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidWork;
 import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidWorks;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Joiner;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * General purpose ORCID client that supports simple OAuth scenarios
@@ -84,14 +82,36 @@ public class OrcidOAuthClient {
 	 *            if true use sandbox endpoints
 	 * @throws JAXBException
 	 *             if we can't create a JaxB context
+	 *
+	 * @deprecated Use {@link #OrcidOAuthClient(String, String, String, OrcidApiType)} instead
 	 */
 	@Inject
+	@Deprecated
 	public OrcidOAuthClient(@Named("OrcidClientID") String clientID, @Named("OrcidClientSecret") String clientSecret,
 			@Named("OrcidReturnURI") String redirectUri, @Named("OrcidSandbox") boolean sandbox) throws JAXBException {
-		if (clientID == null || clientSecret == null || redirectUri == null) {
+		this(clientID, clientSecret, redirectUri, sandbox ? OrcidApiType.SANDBOX : OrcidApiType.LIVE);
+	}
+
+	/**
+	 * Suitable for injection or manual construction. Thread safe.
+	 *
+	 * @param clientID
+	 *            OAuth credential
+	 * @param clientSecret
+	 *            OAuth credential
+	 * @param redirectUri
+	 *            OAuth credential
+	 * @param orcidApiType
+	 *            The {@link OrcidApiType} to use
+	 * @throws JAXBException
+	 *             if we can't create a JaxB context
+	 */
+	public OrcidOAuthClient(String clientID, String clientSecret, String redirectUri, OrcidApiType orcidApiType)
+			throws JAXBException {
+		if (clientID == null || clientSecret == null || redirectUri == null || orcidApiType == null) {
 			throw new IllegalArgumentException("cannot create OrcidOAuthClient - missing init parameter(s)");
 		}
-		if (sandbox) {
+		if (orcidApiType == OrcidApiType.SANDBOX) {
 			this.loginUri = SANDBOX_LOGIN_URI;
 			this.apiUriToken = SANDBOX_API_URI_TOKEN;
 			this.apiUriV12 = SANDBOX_API_URI_V1_2;

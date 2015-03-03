@@ -1,16 +1,15 @@
+import org.junit.Before;
+import org.junit.Test;
+import uk.bl.odin.orcid.client.OrcidAccessToken;
+import uk.bl.odin.orcid.client.OrcidOAuthClient;
+import uk.bl.odin.orcid.client.constants.OrcidApiType;
+
+import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import javax.xml.bind.JAXBException;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import uk.bl.odin.orcid.client.OrcidAccessToken;
-import uk.bl.odin.orcid.client.OrcidOAuthClient;
-import uk.bl.odin.orcid.client.constants.OrcidAuthScope;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 
 
@@ -42,7 +41,7 @@ public class OrcidOAuthClientTest {
 	public final void testCreateProfile() throws IOException, JAXBException {
 		OrcidOAuthClient client = new OrcidOAuthClient(properties.getProperty("orcidClientID"),
 				properties.getProperty("orcidClientSecret"), properties.getProperty("orcidReturnUri"),
-				Boolean.valueOf(properties.getProperty("orcidSandbox")));
+				(Boolean.valueOf(properties.getProperty("orcidSandbox")) ? OrcidApiType.SANDBOX : OrcidApiType.LIVE));
 		OrcidAccessToken tok = client.getCreateProfileAccessToken();
 		assertNotNull(tok.getAccess_token());
 	}
