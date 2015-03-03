@@ -38,8 +38,6 @@ public class OrcidPublicClientTest {
 	
 	@Test
 	public final void testSearchForDOI() throws IOException, JAXBException{	
-		//THIS IS RETURNING INVALID MESSAGES - they're 1.0.23 (have an <orcid> element) despite being labeled as 1.1
-		//I've hacked a fix into the JAXB classes.
 		OrcidPublicClient client = new OrcidPublicClient();
 		String query = OrcidSearchField.DIGITAL_OBJECT_IDS.buildExactQuery("10.9997/abc123");
 		assertEquals("digital-object-ids: \"10.9997/abc123\"",query);
