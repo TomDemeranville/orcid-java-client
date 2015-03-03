@@ -1,25 +1,24 @@
 package uk.bl.odin.orcid.client;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.math.BigInteger;
-import java.util.logging.Logger;
-
-import javax.inject.Inject;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
-
+import uk.bl.odin.orcid.client.constants.OrcidApiType;
 import uk.bl.odin.orcid.client.constants.OrcidConstants;
 import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidMessage;
 import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidProfile;
 import uk.bl.odin.orcid.schema.messages.onepointtwo.OrcidSearchResults;
 
+import javax.inject.Inject;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import java.io.IOException;
+import java.io.StringReader;
+import java.math.BigInteger;
+import java.util.logging.Logger;
+
 /**
- * Orcid client that fetches profiles and performs searches using the (LIVE)
+ * Orcid client that fetches profiles and performs searches using the
  * orcid public api.
  */
 @SuppressWarnings("restriction")
@@ -27,7 +26,8 @@ public class OrcidPublicClient {
 
 	private static final Logger log = Logger.getLogger(OrcidPublicClient.class.getName());
 
-	private static final String PUBLIC_URI_V12 = "http://pub.orcid.org/v1.2";
+	private static final String LIVE_PUBLIC_URI_V12 = "http://pub.orcid.org/v1.2";
+	private static final String SANDBOX_PUBLIC_URI_V12 = "http://pub.sandbox.orcid.org/v1.2";
 	private static final String SEARCH_ENDPOINT = "/search/orcid-bio/";
 
 	private static final String TYPE_ORCID_BIO = "orcid-bio";
@@ -35,9 +35,33 @@ public class OrcidPublicClient {
 
 	private final JAXBContext orcidMessageContext;
 
+	private final String apiUriV12;
+
 	@Inject
 	public OrcidPublicClient() throws JAXBException {
+		this(OrcidApiType.LIVE);
+	}
+
+	/**
+	 * @param apiType
+	 *      the type of API to use when connect to ORCID, must not be {@code null}.
+	 */
+	public OrcidPublicClient(OrcidApiType apiType) throws JAXBException {
+		if (apiType == null) {
+			throw new IllegalArgumentException("apiType is null!");
+		}
+
 		orcidMessageContext = JAXBContext.newInstance(OrcidMessage.class);
+
+		if (apiType == OrcidApiType.SANDBOX) {
+			apiUriV12 = SANDBOX_PUBLIC_URI_V12;
+		}
+		else if (apiType == OrcidApiType.LIVE) {
+			apiUriV12 = LIVE_PUBLIC_URI_V12;
+		}
+		else {
+			throw new IllegalArgumentException("Unknown API type '" + apiType.name() + "'");
+		}
 	}
 
 	/**
@@ -62,7 +86,7 @@ public class OrcidPublicClient {
 		if (query == null || query.isEmpty()) {
 			throw new IllegalArgumentException();
 		}
-		ClientResource res = new ClientResource(PUBLIC_URI_V12 + SEARCH_ENDPOINT);
+		ClientResource res = new ClientResource(apiUriV12 + SEARCH_ENDPOINT);
 		res.accept(OrcidConstants.APPLICATION_ORCID_XML);
 		res.addQueryParameter("q", query);
 		if (pagesize >= 0) {
@@ -105,7 +129,7 @@ public class OrcidPublicClient {
 		if (profileType == null) {
 			throw new IllegalArgumentException();
 		}
-		ClientResource res = new ClientResource(PUBLIC_URI_V12 + "/" + orcid + "/" + profileType);
+		ClientResource res = new ClientResource(apiUriV12 + "/" + orcid + "/" + profileType);
 		res.accept(OrcidConstants.APPLICATION_ORCID_XML);
 		try {
 			Unmarshaller um = orcidMessageContext.createUnmarshaller();
