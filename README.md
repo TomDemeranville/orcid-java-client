@@ -78,7 +78,7 @@ Then add in the RESTlet dependencies.  These need to be defiend by your own appl
 
 #Schema support
 
-The version supports the ORCiD message schema 1.1
+The version supports the ORCiD message schema 1.2
 
 #Contact
 
