@@ -69,12 +69,15 @@ public enum OrcidSearchField {
 	public String toString() { return stringValue; }
 	
 	public final String buildQuery(SearchType type, String term){
-		if (type.equals(SearchType.EXACT))
-				return buildExactQuery(term);
-		else if(type.equals(SearchType.PREFIX))
+		if (type == SearchType.EXACT) {
+			return buildExactQuery(term);
+		}
+		else if(type == SearchType.PREFIX) {
 			return buildPrefixQuery(term);
-		else
+		}
+		else {
 			return buildSolrQuery(term);
+		}
 	}
 	/** Constructs a param suitable for use as a query that EXACTLY matches term
 	 * 

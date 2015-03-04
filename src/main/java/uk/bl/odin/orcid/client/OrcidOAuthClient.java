@@ -305,7 +305,7 @@ public class OrcidOAuthClient {
 	
 	
 	public void addOrcidProfile(){
-		
+		throw new UnsupportedOperationException();
 	}
 
 

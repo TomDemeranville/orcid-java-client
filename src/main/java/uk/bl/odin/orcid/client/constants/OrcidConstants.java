@@ -16,7 +16,7 @@ public class OrcidConstants {
 	
 	//TODO: enumerate search param types
 	public static final String SEARCH_PARAM_DOI = "digital-object-ids";
-	public static String MESSAGE_VERSION = "1.1";
+	public static final String MESSAGE_VERSION = "1.2";
 	
 	//TODO: emumerate sequences
 	public static String SEQUENCE_FIRST = "first";

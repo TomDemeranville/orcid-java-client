@@ -79,7 +79,7 @@ public class OrcidPublicClientTest {
 
 	private String getPathFromOrcidId(OrcidId orcidId) {
 		for (JAXBElement<String> element : orcidId.getContent()) {
-			if (element.getName().getLocalPart().equals("path")) {
+			if ("path".equals(element.getName().getLocalPart())) {
 				return element.getValue();
 			}
 		}

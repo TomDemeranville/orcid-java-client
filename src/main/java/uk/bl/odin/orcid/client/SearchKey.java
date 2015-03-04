@@ -1,66 +1,94 @@
 package uk.bl.odin.orcid.client;
 
-/** Cachable search key
- * 
- * @author tom
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+/**
+ * Cachable search key
  *
+ * @author tom
  */
-public class SearchKey{
-		
-	private String query=null;
-	private int page =-1;
-	private int pagesize =-1;
-	
+public class SearchKey {
+
+	// TODO Make fields final and remove setter in future versions
+	private String query;
+	private int page = -1;
+	private int pagesize = -1;
+
+	public SearchKey(String query, int page, int pageSize) {
+		this.query = query;
+		this.page = page;
+		this.pagesize = pageSize;
+	}
+
 	public String getQuery() {
 		return query;
 	}
+
+	/**
+	 * @deprecated Use {@link #SearchKey(String, int, int)}
+	 */
+	@Deprecated
 	public void setQuery(String query) {
 		this.query = query;
 	}
+
 	public int getPage() {
 		return page;
 	}
+
+	/**
+	 * @deprecated Use {@link #SearchKey(String, int, int)}
+	 */
+	@Deprecated
 	public void setPage(int page) {
 		this.page = page;
 	}
+
 	public int getPagesize() {
 		return pagesize;
 	}
+
+	/**
+	 * @deprecated Use {@link #SearchKey(String, int, int)}
+	 */
+	@Deprecated
 	public void setPagesize(int pagesize) {
 		this.pagesize = pagesize;
 	}
+
 	@Override
 	public String toString() {
 		return "SearchKey [query=" + query + ", page=" + page + ", pagesize=" + pagesize + "]";
 	}
+
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + page;
-		result = prime * result + pagesize;
-		result = prime * result + ((query == null) ? 0 : query.hashCode());
-		return result;
+		return new HashCodeBuilder(1, 31).
+				append(page).
+				append(pagesize).
+				append(query).
+				toHashCode();
 	}
+
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
 			return true;
-		if (obj == null)
+		}
+		if (obj.getClass() != getClass()) {
 			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		SearchKey other = (SearchKey) obj;
-		if (page != other.page)
-			return false;
-		if (pagesize != other.pagesize)
-			return false;
-		if (query == null) {
-			if (other.query != null)
-				return false;
-		} else if (!query.equals(other.query))
-			return false;
-		return true;
+		}
+		SearchKey rhs = (SearchKey) obj;
+		return new EqualsBuilder()
+				.appendSuper(super.equals(obj))
+				.append(page, rhs.page)
+				.append(pagesize, rhs.pagesize)
+				.append(query, rhs.query)
+				.isEquals();
 	}
-	
+
 }
