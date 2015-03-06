@@ -60,19 +60,19 @@ public class OrcidPublicClientTest {
 	@Test
 	public final void testSearchForDOIPrefix() throws IOException, JAXBException{	
 		OrcidPublicClient client = new OrcidPublicClient();
-		String query = OrcidSearchField.DIGITAL_OBJECT_IDS.buildPrefixQuery("10.9998");
-		assertEquals("digital-object-ids: 10.9998*",query);
+		String query = OrcidSearchField.DIGITAL_OBJECT_IDS.buildPrefixQuery("10.1007/s10009-014-0321");
+		assertEquals("digital-object-ids: \"10.1007/s10009-014-0321*\"",query);
 		OrcidSearchResults results = client.search(query);
 		assertEquals(1,results.getNumFound().intValue());
 		assertEquals(getPathFromOrcidId(results.getOrcidSearchResult().get(0).getOrcidProfile().getOrcidIdentifier()),
-				"0000-0002-9151-6445");
+				"0000-0002-0661-7998");
 	}
 	
 	@Test
 	public final void testEmptySearch() throws IOException, JAXBException{	
 		OrcidPublicClient client = new OrcidPublicClient();
 		String query = OrcidSearchField.DIGITAL_OBJECT_IDS.buildPrefixQuery("10.9998DGSJHAJHLDSAG");
-		assertEquals("digital-object-ids: 10.9998DGSJHAJHLDSAG*",query);
+		assertEquals("digital-object-ids: \"10.9998DGSJHAJHLDSAG*\"",query);
 		OrcidSearchResults results = client.search(query);
 		assertEquals(0, results.getNumFound().intValue());
 	}

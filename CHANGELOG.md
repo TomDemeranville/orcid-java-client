@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+### Fixed
+- Adding quote signs to prefix search, fixes missing search results
+
 ## [0.12.1] - 2015-03-04
 ### Added
 - Allow access to public API of sandbox.orcid.org

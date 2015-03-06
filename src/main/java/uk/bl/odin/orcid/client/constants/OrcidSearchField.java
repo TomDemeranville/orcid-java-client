@@ -96,7 +96,7 @@ public enum OrcidSearchField {
 	 * @return
 	 */
 	public final String buildPrefixQuery(String term) {
-		return this.toString() + ": " + term + "*";
+		return this.toString() + ": \"" + term + "*\"";
 	}
 	
 	public final String buildSolrQuery(String term) {
