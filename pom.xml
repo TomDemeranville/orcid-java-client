@@ -99,7 +99,14 @@
         <plugin>
             <groupId>com.github.github</groupId>
             <artifactId>site-maven-plugin</artifactId>
-            <version>0.8</version>
+            <version>0.12</version>
+	    <dependencies>
+		    <dependency>
+			    <groupId>org.eclipse.mylyn.github</groupId>
+			    <artifactId>org.eclipse.egit.github.core</artifactId>
+			    <version>2.1.5</version>
+		    </dependency>
+	    </dependencies>
             <configuration>
                 <message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
                 <noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
