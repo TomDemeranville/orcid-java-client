@@ -1,9 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.12.2] - 2015-06-08
 ### Fixed
 - Adding quote signs to prefix search, fixes missing search results
+- Updated GitHub site plugin
 
 ## [0.12.1] - 2015-03-04
 ### Added
