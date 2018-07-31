@@ -1,6 +1,12 @@
 NOTE: NO LONGER MAINTAINED, ONLY SUPPORTS DEPRECATED VERSIONS OF ORCID API
 ==========================================================================
 
+**See [orcid-model-2.1.jar](https://github.com/ORCID/orcid-public-lib/tree/master/orcid-model) for the latest model.  This is a jar file that will serialise API requests and responses to/from Java/XML/JSON**
+
+
+---
+
+
 #ORCiD Java Client
 
 Simple, easy to use ORCiD client written in Java.  Supports the public and Tier2 API with OAuth. Natural object
