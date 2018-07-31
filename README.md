@@ -1,3 +1,6 @@
+NOTE: NO LONGER MAINTAINED, ONLY SUPPORTS DEPRECATED VERSIONS OF ORCID API
+==========================================================================
+
 #ORCiD Java Client
 
 Simple, easy to use ORCiD client written in Java.  Supports the public and Tier2 API with OAuth. Natural object
